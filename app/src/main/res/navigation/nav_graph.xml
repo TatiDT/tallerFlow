@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/clienteFragment">
+
+    <fragment
+        android:id="@+id/clienteFragment"
+        android:name="com.abarca.tallermecanico.ui.cliente.ClienteFragment"
+        android:label="@string/nav_clientes"
+        tools:layout="@layout/fragment_cliente">
+        <action
+            android:id="@+id/action_cliente_to_form"
+            app:destination="@id/clienteFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vehiculoFragment"
+        android:name="com.abarca.tallermecanico.ui.vehiculo.VehiculoFragment"
+        android:label="@string/nav_vehiculos"
+        tools:layout="@layout/fragment_vehiculo">
+        <action
+            android:id="@+id/action_vehiculo_to_form"
+            app:destination="@id/vehiculoFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/usuarioFragment"
+        android:name="com.abarca.tallermecanico.ui.usuario.UsuarioFragment"
+        android:label="@string/nav_usuarios"
+        tools:layout="@layout/fragment_usuario">
+        <action
+            android:id="@+id/action_usuario_to_form"
+            app:destination="@id/usuarioFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/repuestoFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.RepuestoFragment"
+        android:label="@string/nav_repuestos"
+        tools:layout="@layout/fragment_repuesto">
+        <action
+            android:id="@+id/action_repuesto_to_form"
+            app:destination="@id/repuestoFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/repuestoFormFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.RepuestoFormFragment"
+        android:label="@string/title_repuesto_form"
+        tools:layout="@layout/fragment_repuesto_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/clienteFormFragment"
+        android:name="com.abarca.tallermecanico.ui.cliente.ClienteFormFragment"
+        android:label="@string/title_cliente_form"
+        tools:layout="@layout/fragment_cliente_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vehiculoFormFragment"
+        android:name="com.abarca.tallermecanico.ui.vehiculo.VehiculoFormFragment"
+        android:label="@string/title_vehiculo_form"
+        tools:layout="@layout/fragment_vehiculo_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_vehiculo_form_to_inspeccion"
+            app:destination="@id/inspeccionFragment" />
+        <action
+            android:id="@+id/action_vehiculo_form_to_costos"
+            app:destination="@id/costosFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/costosFragment"
+        android:name="com.abarca.tallermecanico.ui.mecanico.CostosFragment"
+        android:label="@string/title_costos"
+        tools:layout="@layout/fragment_costos">
+        <argument
+            android:name="vehiculoId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inspeccionFragment"
+        android:name="com.abarca.tallermecanico.ui.mecanico.InspeccionFragment"
+        android:label="@string/title_inspeccion"
+        tools:layout="@layout/fragment_inspeccion">
+        <argument
+            android:name="vehiculoId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/usuarioFormFragment"
+        android:name="com.abarca.tallermecanico.ui.usuario.UsuarioFormFragment"
+        android:label="@string/title_usuario_form"
+        tools:layout="@layout/fragment_usuario_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

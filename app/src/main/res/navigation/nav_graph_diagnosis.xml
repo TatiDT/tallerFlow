@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_diagnosis"
+    app:startDestination="@id/diagnosisVehiculosFragment">
+
+    <fragment
+        android:id="@+id/diagnosisVehiculosFragment"
+        android:name="com.abarca.tallermecanico.ui.diagnosis.DiagnosisVehiculosFragment"
+        android:label="@string/nav_diagnosis"
+        tools:layout="@layout/fragment_diagnosis_vehiculos">
+        <action
+            android:id="@+id/action_diagnosis_vehiculos_to_diagnosticos"
+            app:destination="@id/diagnosticosFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/diagnosticosFragment"
+        android:name="com.abarca.tallermecanico.ui.diagnosis.DiagnosticosFragment"
+        android:label="@string/title_diagnosticos"
+        tools:layout="@layout/fragment_diagnosticos">
+        <argument
+            android:name="vehiculoId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

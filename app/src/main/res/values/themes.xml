@@ -1,0 +1,49 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.TallerMecanico" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/tf_accent</item>
+        <item name="colorOnPrimary">@color/tf_bg_dark</item>
+        <item name="colorPrimaryContainer">@color/tf_accent_dark</item>
+        <item name="colorOnPrimaryContainer">@color/tf_text_primary</item>
+        <item name="colorSecondary">@color/tf_accent</item>
+        <item name="colorOnSecondary">@color/tf_bg_dark</item>
+        <item name="colorSecondaryContainer">@color/tf_surface</item>
+        <item name="colorOnSecondaryContainer">@color/tf_text_primary</item>
+        <item name="android:colorBackground">@color/tf_bg_dark</item>
+        <item name="colorSurface">@color/tf_surface</item>
+        <item name="colorOnSurface">@color/tf_text_primary</item>
+        <item name="colorSurfaceVariant">@color/tf_surface</item>
+        <item name="colorOnSurfaceVariant">@color/tf_text_secondary</item>
+        <item name="colorSurfaceContainer">@color/tf_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/tf_surface</item>
+        <item name="colorSurfaceContainerHighest">@color/tf_surface</item>
+        <item name="colorOutline">@color/tf_glass_stroke_strong</item>
+        <item name="colorOutlineVariant">@color/tf_glass_stroke</item>
+        <item name="android:windowBackground">@drawable/bg_vistas</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="textAppearanceDisplayLarge">@style/TF.Texto.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TF.Texto.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TF.Texto.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TF.Texto.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TF.Texto.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TF.Texto.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TF.Texto.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TF.Texto.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TF.Texto.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TF.Texto.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TF.Texto.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TF.Texto.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TF.Texto.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TF.Texto.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TF.Texto.LabelSmall</item>
+    </style>
+
+    <style name="Theme.TallerMecanico" parent="Base.Theme.TallerMecanico" />
+
+    <style name="ShapeTopRounded" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSizeTopLeft">28dp</item>
+        <item name="cornerSizeTopRight">28dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+</resources>

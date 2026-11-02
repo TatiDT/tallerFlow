@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta Teal -->
+    <color name="teal_lighten_5">#e0f2f1</color>
+    <color name="teal_lighten_4">#b2dfdb</color>
+    <color name="teal_lighten_3">#80cbc4</color>
+    <color name="teal_lighten_2">#4db6ac</color>
+    <color name="teal_lighten_1">#26a69a</color>
+    <color name="teal">#009688</color>
+    <color name="teal_darken_1">#00897b</color>
+    <color name="teal_darken_2">#00796b</color>
+    <color name="teal_darken_3">#00695c</color>
+    <color name="teal_darken_4">#004d40</color>
+
+    <!-- Colores de estado (vehículo) -->
+    <color name="estado_ingresado">#6FA8DC</color>
+    <color name="estado_en_reparacion">#F57C00</color>
+    <color name="estado_terminado">#7B1FA2</color>
+    <color name="estado_listo">#388E3C</color>
+    <color name="estado_entregado">#757575</color>
+
+    <!-- Colores de rol (usuario) -->
+    <color name="rol_admin">#006064</color>
+    <color name="rol_jefe_taller">#4A148C</color>
+    <color name="rol_mecanico">#0D47A1</color>
+    <color name="rol_repuesto">#E65100</color>
+    <color name="rol_diagnosis">#1B5E20</color>
+
+    <!-- Texto sobre badges (siempre blanco) -->
+    <color name="badge_text">#FFFFFF</color>
+
+    <!-- Alerta de plazo vencido -->
+    <color name="color_vencido">#D32F2F</color>
+</resources>

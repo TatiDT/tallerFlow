@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_operativo"
+    app:startDestination="@id/vehiculoFragment">
+
+    <fragment
+        android:id="@+id/vehiculoFragment"
+        android:name="com.abarca.tallermecanico.ui.vehiculo.VehiculoFragment"
+        android:label="@string/nav_vehiculos"
+        tools:layout="@layout/fragment_vehiculo">
+        <action
+            android:id="@+id/action_vehiculo_to_form"
+            app:destination="@id/vehiculoFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vehiculoFormFragment"
+        android:name="com.abarca.tallermecanico.ui.vehiculo.VehiculoFormFragment"
+        android:label="@string/title_vehiculo_form"
+        tools:layout="@layout/fragment_vehiculo_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

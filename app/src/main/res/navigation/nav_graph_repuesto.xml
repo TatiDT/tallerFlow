@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_repuesto"
+    app:startDestination="@id/repuestoFragment">
+
+    <fragment
+        android:id="@+id/repuestoFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.RepuestoFragment"
+        android:label="@string/nav_repuestos"
+        tools:layout="@layout/fragment_repuesto">
+        <action
+            android:id="@+id/action_repuesto_to_form"
+            app:destination="@id/repuestoFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/repuestoFormFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.RepuestoFormFragment"
+        android:label="@string/title_repuesto_form"
+        tools:layout="@layout/fragment_repuesto_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

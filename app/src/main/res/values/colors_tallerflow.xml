@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paleta TallerFlow: tonos tomados de la foto (café / cobre / negro carbono) -->
+    <color name="tf_bg_dark">#120D09</color>
+    <color name="tf_accent">#E0A458</color>          <!-- cobre/ámbar -->
+    <color name="tf_accent_dark">#B9803C</color>
+
+    <color name="tf_text_primary">#FFFFFF</color>
+    <color name="tf_text_secondary">#E6FFFFFF</color> <!-- blanco 70% -->
+    <color name="tf_text_hint">#B8FFFFFF</color>      <!-- blanco 55% -->
+
+    <!-- Efecto vidrio -->
+    <color name="tf_glass">#59000000</color>          <!-- negro 35%: la tarjeta -->
+    <color name="tf_glass_stroke">#33FFFFFF</color>   <!-- borde sutil -->
+    <color name="tf_glass_stroke_strong">#66FFFFFF</color>
+    <color name="tf_input_fill">#1FFFFFFF</color>     <!-- blanco 12%: los inputs -->
+    <color name="tf_bar">#CC120D09</color>
+    <color name="tf_surface">#FF2A2019</color>
+</resources>

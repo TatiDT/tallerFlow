@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/til_descripcion_falla"
+    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginTop="8dp"
+    android:hint="@string/hint_descripcion_falla">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/et_descripcion_falla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minLines="2"
+        android:maxLines="4" />
+
+</com.google.android.material.textfield.TextInputLayout>

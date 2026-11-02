@@ -1,0 +1,261 @@
+<resources>
+    <string name="app_name">TallerMecanico</string>
+    <string name="app_title">TallerFlow</string>
+    <string name="app_subtitle">Sistema de Gestión</string>
+
+    <!-- Login -->
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="hint_username_login">Nombre de usuario</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="error_username_required">Ingresa tu nombre de usuario</string>
+    <string name="error_password_required">Ingresa tu contraseña</string>
+    <string name="error_password_short">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_login_invalido">Usuario o contraseña incorrectos</string>
+
+    <!-- Navegación -->
+    <string name="nav_clientes">Clientes</string>
+    <string name="nav_vehiculos">Vehículos</string>
+    <string name="nav_usuarios">Usuarios</string>
+    <string name="nav_ordenes_activas">Órdenes Activas</string>
+    <string name="nav_repuestos">Repuestos</string>
+    <string name="nav_diagnosis">Diagnosis</string>
+
+    <!-- Títulos de formularios -->
+    <string name="title_nuevo_cliente">Nuevo Cliente</string>
+    <string name="title_editar_cliente">Editar Cliente</string>
+    <string name="title_cliente_form">Cliente</string>
+    <string name="title_nuevo_vehiculo">Nuevo Vehículo</string>
+    <string name="title_editar_vehiculo">Editar Vehículo</string>
+    <string name="title_vehiculo_form">Vehículo</string>
+    <string name="title_nuevo_usuario">Nuevo Usuario</string>
+    <string name="title_editar_usuario">Editar Usuario</string>
+    <string name="title_usuario_form">Usuario</string>
+    <string name="title_nuevo_repuesto">Nuevo Repuesto</string>
+    <string name="title_editar_repuesto">Editar Repuesto</string>
+    <string name="title_repuesto_form">Repuesto</string>
+    <string name="title_diagnosticos">Diagnósticos</string>
+
+    <!-- Campos Cliente -->
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_apellido">Apellido</string>
+    <string name="hint_rut">RUT (ej: 12.345.678-9)</string>
+    <string name="hint_telefono">Teléfono</string>
+    <string name="hint_email_optional">Correo electrónico (opcional)</string>
+
+    <!-- Campos Vehículo -->
+    <string name="hint_patente">Patente</string>
+    <string name="hint_marca">Marca</string>
+    <string name="hint_modelo">Modelo</string>
+    <string name="hint_anio">Año</string>
+    <string name="hint_color">Color</string>
+    <string name="hint_cliente">Cliente</string>
+    <string name="hint_estado">Estado</string>
+    <string name="hint_kilometraje">Kilometraje</string>
+    <string name="hint_mecanico">Mecánico asignado</string>
+    <string name="label_sin_asignar">Sin asignar</string>
+    <string name="hint_fecha_ingreso">Fecha de ingreso</string>
+    <string name="hint_observaciones">Observaciones (opcional)</string>
+
+    <!-- Presupuesto -->
+    <string name="title_nuevo_presupuesto">Nuevo Presupuesto</string>
+    <string name="title_editar_presupuesto">Editar Presupuesto</string>
+    <string name="label_tratamiento_precio">%1$s · %2$s</string>
+    <string name="label_fecha_presupuesto">Creado el %1$s</string>
+    <string name="label_neto">Neto</string>
+    <string name="label_iva">IVA (19%)</string>
+    <string name="label_total_iva">Total</string>
+    <string name="label_otro">Otro</string>
+    <string name="hint_otro_descripcion">Descripción</string>
+    <string name="hint_otro_monto">Valor neto ($)</string>
+    <string name="error_sin_tratamientos">Selecciona al menos un tratamiento</string>
+    <string name="error_monto_invalido">Ingresa un monto válido</string>
+    <string name="label_presupuesto">Presupuesto: %1$s IVA incl. · %2$d tratamiento(s) · %3$s</string>
+    <string name="label_sin_presupuesto_jefe">Sin presupuesto</string>
+    <string name="label_presupuesto_aprobado">Aprobado</string>
+    <string name="label_presupuesto_pendiente">Pendiente de aprobación</string>
+    <string name="label_presupuesto_aprobado_el">Aprobado el %1$s</string>
+    <string name="title_presupuesto">Presupuesto</string>
+    <string name="title_agregar_presupuesto">Agregar al presupuesto</string>
+    <string name="btn_aprobar">Aprobar</string>
+    <string name="btn_cerrar">Cerrar</string>
+    <string name="confirm_aprobar_presupuesto_title">Aprobar presupuesto</string>
+    <string name="confirm_aprobar_presupuesto_message">Confirma que el cliente autorizó el trabajo. Se crearán las tareas del mecánico y el presupuesto ya no se podrá modificar.</string>
+    <string name="btn_presupuesto_vacio">Sin presupuesto · toca para agregar tratamientos</string>
+    <string name="btn_presupuesto_pendiente">Presupuesto %1$s · Pendiente · toca para agregar</string>
+    <string name="btn_presupuesto_aprobado">Presupuesto %1$s · Aprobado · toca para ver</string>
+    <string name="error_presupuesto_no_aprobado">El presupuesto debe estar aprobado antes de asignar mecánico</string>
+    <string name="menu_aprobar_trabajo">Aprobar trabajo</string>
+    <string name="menu_devolver">Devolver al mecánico</string>
+    <string name="menu_entregar">Marcar como entregado</string>
+    <string name="confirm_aprobar_trabajo_title">Aprobar trabajo</string>
+    <string name="confirm_aprobar_trabajo_message">El trabajo quedará revisado y el vehículo pasará a \"Listo\" para entregar.</string>
+    <string name="confirm_devolver_title">Devolver al mecánico</string>
+    <string name="confirm_devolver_message">El vehículo volverá a \"En Reparación\" para que el mecánico corrija el trabajo.</string>
+    <string name="confirm_entregar_title">Entregar vehículo</string>
+    <string name="confirm_entregar_message">El vehículo se marcará como entregado al cliente.</string>
+    <string name="title_tareas_pendientes">Tareas pendientes</string>
+    <string name="msg_tareas_pendientes">Completa todas las tareas del checklist antes de marcar el trabajo como terminado.</string>
+    <string name="label_sin_presupuesto">Sin presupuesto · toca para asignar</string>
+
+    <!-- Campos Usuario -->
+    <string name="hint_username">Nombre de usuario</string>
+    <string name="hint_password_new">Contraseña (mín. 6 caracteres)</string>
+    <string name="hint_password_edit">Contraseña (dejar vacío para no cambiar)</string>
+    <string name="hint_rol">Rol</string>
+    <string name="hint_activo">Activo</string>
+
+    <!-- Campos Repuesto -->
+    <string name="hint_nombre_repuesto">Nombre del repuesto</string>
+    <string name="hint_codigo_repuesto">Código</string>
+    <string name="hint_stock">Stock</string>
+    <string name="error_codigo_duplicado">Este código ya está registrado</string>
+    <string name="label_stock">Stock: %1$d</string>
+    <string name="hint_categoria">Categoría</string>
+    <string name="hint_precio">Precio neto (CLP)</string>
+    <string name="error_precio_invalido">Ingresa un precio entre 1 y 10.000.000</string>
+    <string name="error_stock_invalido">Ingresa un stock entre 0 y 100.000</string>
+
+    <!-- Firebase -->
+    <string name="msg_guardado_ok">Registro guardado correctamente</string>
+    <string name="msg_eliminado_ok">Registro eliminado correctamente</string>
+    <string name="error_sin_conexion">Sin conexión: no se pudo completar la operación</string>
+    <string name="error_sin_permiso">No tienes permiso para realizar esta operación</string>
+    <string name="error_guardado">No se pudo completar la operación, intenta nuevamente</string>
+    <string name="error_telefono_invalido">Ingresa un teléfono válido (mínimo 8 dígitos)</string>
+    <string name="error_email_invalido">Correo electrónico inválido</string>
+    <string name="canal_avisos_nombre">Avisos del taller</string>
+
+    <!-- Campo fecha límite (Jefe de Taller) -->
+    <string name="hint_fecha_limite">Fecha límite</string>
+    <string name="label_fecha_limite">Fecha límite: %1$s</string>
+    <string name="error_fecha_invalida">Formato inválido, usa dd/mm/aaaa</string>
+
+    <!-- Diagnósticos -->
+    <string name="hint_nuevo_diagnostico">Nuevo hallazgo de diagnóstico</string>
+    <string name="empty_diagnosticos">No hay diagnósticos registrados.</string>
+    <string name="empty_diagnosis_vehiculos">No hay vehículos registrados.</string>
+
+    <!-- Botones -->
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_eliminar">Eliminar</string>
+
+    <!-- Confirmación eliminar -->
+    <string name="confirm_delete_title">Eliminar registro</string>
+    <string name="confirm_delete_message">¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer.</string>
+    <string name="btn_confirmar">Confirmar</string>
+
+    <!-- Errores de validación -->
+    <string name="error_campo_requerido">Este campo es requerido</string>
+    <string name="error_rut_duplicado">Este RUT ya está registrado</string>
+    <string name="error_patente_duplicada">Esta patente ya está registrada</string>
+    <string name="error_hallazgo_duplicado">Este hallazgo ya está registrado para el vehículo</string>
+    <string name="error_username_duplicado">Este nombre de usuario ya existe</string>
+    <string name="error_anio_invalido">Año inválido</string>
+    <string name="error_mecanico_limite">Este mecánico ya tiene 2 vehículos activos</string>
+    <string name="error_tarea_duplicada">Esta tarea ya está registrada para el vehículo</string>
+    <string name="error_cliente_con_vehiculos">No se puede eliminar: el cliente tiene vehículos registrados</string>
+    <string name="error_usuario_propio">No puedes eliminar, desactivar ni cambiar el rol de tu propia cuenta</string>
+    <string name="error_mecanico_con_vehiculos">No se puede eliminar, desactivar ni cambiar de rol: el mecánico tiene vehículos asignados que aún no se entregan</string>
+
+    <!-- Listas vacías -->
+    <string name="empty_clientes">No hay clientes registrados.\nToca + para agregar uno.</string>
+    <string name="empty_vehiculos">No hay vehículos registrados.\nToca + para agregar uno.</string>
+    <string name="empty_usuarios">No hay usuarios registrados.\nToca + para agregar uno.</string>
+    <string name="empty_ordenes">No tienes órdenes activas asignadas.</string>
+    <string name="empty_tareas">No hay tareas registradas.</string>
+    <string name="empty_costos">No hay costos registrados.</string>
+    <string name="empty_repuestos">No hay repuestos registrados.\nToca + para agregar uno.</string>
+
+    <!-- Estados vehículo -->
+    <string name="estado_ingresado">Ingresado</string>
+    <string name="estado_en_reparacion">En Reparación</string>
+    <string name="estado_listo">Listo</string>
+    <string name="estado_entregado">Entregado</string>
+
+    <!-- Roles -->
+    <string name="rol_admin">Administración</string>
+    <string name="rol_jefe_taller">Jefe de Taller</string>
+    <string name="rol_mecanico">Mecánico</string>
+    <string name="rol_repuesto">Encargado Repuesto</string>
+    <string name="rol_diagnosis">Encargado Diagnosis</string>
+
+    <!-- Misc -->
+    <string name="label_activo">Activo</string>
+    <string name="label_inactivo">Inactivo</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+    <string name="menu_asistente">Asistente</string>
+    <string name="btn_cerrar_asistente">Cerrar</string>
+    <string name="hint_email_usuario">Correo de Google (opcional)</string>
+    <string name="error_email_usuario_duplicado">Ese correo ya pertenece a otro usuario</string>
+    <string name="btn_login_google">Continuar con Google</string>
+    <string name="error_google_sin_usuario">Esta cuenta de Google no está asociada a ningún usuario activo. Pide al administrador que registre tu correo.</string>
+    <string name="error_google_cancelado">No se pudo iniciar sesión con Google. Inténtalo nuevamente.</string>
+    <string name="error_google_sin_cuentas">No hay cuentas de Google disponibles en este dispositivo.</string>
+    <string name="menu_idioma">Idioma</string>
+    <string name="title_idioma">Idioma de la aplicación</string>
+    <string name="title_asistente">Asistente del taller</string>
+    <string name="hint_mensaje_asistente">Escribe tu consulta</string>
+    <string name="btn_enviar">Enviar</string>
+    <string name="asistente_bienvenida">Hola, soy el asistente del taller. Puedo ayudarte con diagnósticos, fallas comunes y mantenimiento de vehículos.</string>
+    <string name="asistente_error">No se pudo obtener respuesta. Revisa tu conexión e inténtalo nuevamente.</string>
+
+    <!-- Títulos por rol -->
+    <string name="title_home_admin">Administración</string>
+    <string name="title_jefe_taller">Jefe de Taller</string>
+    <string name="title_operativo">Vehículos</string>
+
+    <!-- Vista Mecánico: ficha activa -->
+    <string name="title_ficha_activa">Ficha Activa</string>
+    <string name="tab_tareas">Tareas</string>
+    <string name="tab_costos">Costos</string>
+    <string name="tab_inspeccion">Inspección</string>
+
+    <!-- Inspección 360 -->
+    <string name="title_inspeccion">Inspección 360</string>
+    <string name="menu_inspeccion">Inspección 360</string>
+    <string name="ayuda_inspeccion">Toca el auto donde está la falla para marcarla</string>
+    <string name="menu_costos">Costos</string>
+    <string name="title_costos">Costos</string>
+    <string name="title_editar_costo">Editar costo</string>
+    <string name="title_nueva_falla">Nueva Falla</string>
+    <string name="hint_descripcion_falla">Descripción de la falla</string>
+    <string name="empty_fallas">Toca la imagen del vehículo para marcar una falla.</string>
+    <string name="label_progreso">%1$d%% completado</string>
+    <string name="hint_nueva_tarea">Nueva tarea</string>
+    <string name="btn_agregar">Agregar</string>
+    <string name="hint_descripcion_costo">Descripción</string>
+    <string name="hint_monto_costo">Monto ($)</string>
+    <string name="label_total_costos">Total acumulado: %1$s</string>
+    <string name="menu_dar_alta">Marcar como terminado</string>
+    <string name="confirm_dar_alta_title">Trabajo terminado</string>
+    <string name="confirm_dar_alta_message">El vehículo pasará a \"Terminado\" y el Jefe de Taller revisará el trabajo antes de dejarlo listo. ¿Confirmas?</string>
+    <string name="error_rut_invalido">RUT inválido, revisa el dígito verificador</string>
+    <string name="error_km_invalido">Kilometraje inválido</string>
+    <string name="error_mecanico_con_historial">No se puede eliminar: el mecánico tiene vehículos en su historial. Desactívalo en su lugar</string>
+    <string name="error_tratamiento_duplicado">Ya hay un tratamiento con ese nombre</string>
+    <string name="error_sin_tareas">Agrega al menos una tarea al checklist antes de terminar el trabajo.</string>
+    <string name="error_trabajo_incompleto">El checklist tiene tareas pendientes; devuelve el vehículo al mecánico.</string>
+    <string name="hint_motivo_devolucion">Qué debe corregir el mecánico</string>
+    <string name="label_hallazgos_inspeccion">Fallas de la inspección 360 · toca para fijar precio</string>
+    <string name="label_hallazgo_sin_precio">#%1$d %2$s · sin precio</string>
+    <string name="label_hallazgo_precio">#%1$d %2$s · %3$s</string>
+    <string name="title_precio_falla">Precio de la falla #%1$d</string>
+    <string name="msg_hallazgos_fuera">\n\n%1$d falla(s) de la inspección no tienen precio y quedarán fuera del presupuesto.</string>
+    <string name="label_hallazgos_por_cotizar">%1$d falla(s) de inspección por cotizar</string>
+    <string name="error_falla_presupuestada">No se puede eliminar: la falla ya está en un presupuesto aprobado</string>
+    <string name="label_tarea_adicional_pendiente">%1$s (adicional · esperando aprobación del cliente)</string>
+    <string name="msg_adicional_enviado">El presupuesto ya está aprobado: la tarea se envió a Administración como adicional para cotizarla con el cliente.</string>
+    <string name="msg_adicionales_pendientes">Hay trabajos adicionales esperando que el cliente los apruebe. Administración debe registrar su respuesta antes de terminar.</string>
+    <string name="label_adicionales">Adicionales (después de aprobar)</string>
+    <string name="label_adicional_fila">%1$s · %2$s · %3$s</string>
+    <string name="label_adicional_toca">Toca un adicional pendiente para cotizarlo y registrar la respuesta del cliente</string>
+    <string name="label_sin_precio">sin precio</string>
+    <string name="title_adicional">Adicional</string>
+    <string name="btn_cliente_aprueba">Cliente aprueba</string>
+    <string name="btn_cliente_rechaza">Cliente rechaza</string>
+    <string name="label_adicionales_por_cotizar">%1$d adicional(es) esperando respuesta del cliente</string>
+    <string name="reintentar">Reintentar</string>
+</resources>

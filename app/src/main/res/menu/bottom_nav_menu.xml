@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/clienteFragment"
+        android:icon="@drawable/ic_nav_usuario"
+        android:title="@string/nav_clientes" />
+    <item
+        android:id="@+id/vehiculoFragment"
+        android:icon="@drawable/ic_nav_vehiculo"
+        android:title="@string/nav_vehiculos" />
+    <item
+        android:id="@+id/repuestoFragment"
+        android:icon="@drawable/ic_nav_vehiculos"
+        android:title="@string/nav_repuestos" />
+    <item
+        android:id="@+id/usuarioFragment"
+        android:icon="@drawable/ic_nav_usuario"
+        android:title="@string/nav_usuarios" />
+</menu>

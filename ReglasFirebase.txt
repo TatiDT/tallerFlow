@@ -1,0 +1,188 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function textoValido(valor, maximo) {
+      return valor is string && valor.trim().size() > 0 && valor.size() <= maximo;
+    }
+
+    function textoOpcional(valor, maximo) {
+      return valor is string && valor.size() <= maximo;
+    }
+
+    function clienteValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'nombre', 'apellido', 'rut', 'telefono', 'email'])
+        && d.id is int
+        && textoValido(d.nombre, 60)
+        && textoValido(d.apellido, 60)
+        && textoValido(d.rut, 12)
+        && textoValido(d.telefono, 20)
+        && textoOpcional(d.email, 80);
+    }
+
+    function repuestoValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'nombre', 'codigo', 'categoria', 'precio', 'stock'])
+        && d.id is int
+        && textoValido(d.nombre, 60)
+        && textoValido(d.codigo, 30)
+        && textoValido(d.categoria, 40)
+        && d.precio is int && d.precio > 0 && d.precio <= 10000000
+        && d.stock is int && d.stock >= 0 && d.stock <= 100000;
+    }
+
+    function vehiculoValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'patente', 'marca', 'modelo', 'año', 'color', 'clienteId',
+          'estado', 'kilometraje', 'mecanicoId', 'fechaIngreso', 'observaciones', 'fechaLimite'])
+        && d.id is int
+        && textoValido(d.patente, 12)
+        && textoValido(d.marca, 40)
+        && textoValido(d.modelo, 40)
+        && d['año'] is int
+        && textoOpcional(d.color, 30)
+        && d.clienteId is int
+        && d.estado in ['INGRESADO', 'EN_REPARACION', 'TERMINADO', 'LISTO', 'ENTREGADO']
+        && d.kilometraje is int && d.kilometraje >= 0
+        && (d.mecanicoId == null || d.mecanicoId is int)
+        && textoOpcional(d.fechaIngreso, 20)
+        && textoOpcional(d.observaciones, 500)
+        && textoOpcional(d.fechaLimite, 20);
+    }
+
+    function usuarioValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'nombre', 'apellido', 'username', 'email', 'password', 'rol', 'activo'])
+        && d.id is int
+        && textoValido(d.nombre, 60)
+        && textoValido(d.apellido, 60)
+        && textoValido(d.username, 40)
+        && textoOpcional(d.email, 80)
+        && textoValido(d.password, 200)
+        && d.rol in ['ADMIN', 'JEFE_TALLER', 'MECANICO', 'REPUESTO', 'DIAGNOSIS']
+        && d.activo is bool;
+    }
+
+    function fallaValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'vehiculoId', 'x', 'y', 'descripcion', 'fecha'])
+        && d.id is int
+        && d.vehiculoId is int
+        && d.x is number && d.y is number
+        && textoValido(d.descripcion, 300)
+        && textoOpcional(d.fecha, 20);
+    }
+
+    function diagnosticoValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'vehiculoId', 'descripcion', 'fecha'])
+        && d.id is int
+        && d.vehiculoId is int
+        && textoValido(d.descripcion, 300)
+        && textoOpcional(d.fecha, 20);
+    }
+
+    function tareaValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'vehiculoId', 'descripcion', 'completada'])
+        && d.id is int
+        && d.vehiculoId is int
+        && textoValido(d.descripcion, 300)
+        && d.completada is bool;
+    }
+
+    function costoValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'vehiculoId', 'descripcion', 'monto', 'fecha'])
+        && d.id is int
+        && d.vehiculoId is int
+        && textoValido(d.descripcion, 200)
+        && d.monto is number && d.monto > 0 && d.monto <= 100000000
+        && textoOpcional(d.fecha, 20);
+    }
+
+    function presupuestoValido() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'vehiculoId', 'tratamientos', 'fechaCreacion',
+          'aprobado', 'fechaAprobacion', 'adicionales'])
+        && d.id is int
+        && d.vehiculoId is int
+        && d.tratamientos is list && d.tratamientos.size() <= 100
+        && textoOpcional(d.fechaCreacion, 20)
+        && d.aprobado is bool
+        && textoOpcional(d.fechaAprobacion, 20)
+        && d.adicionales is list && d.adicionales.size() <= 100;
+    }
+
+    match /clientes/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && clienteValido();
+      allow delete: if autenticado();
+    }
+
+    match /repuestos/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && repuestoValido();
+      allow delete: if autenticado();
+    }
+
+    match /vehiculos/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && vehiculoValido();
+      allow delete: if autenticado();
+    }
+
+    match /usuarios/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && usuarioValido();
+      allow delete: if autenticado();
+    }
+
+    match /fallas/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && fallaValida();
+      allow delete: if autenticado();
+    }
+
+    match /diagnosticos/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && diagnosticoValido();
+      allow delete: if autenticado();
+    }
+
+    match /tareas/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && tareaValida();
+      allow delete: if autenticado();
+    }
+
+    match /costos/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && costoValido();
+      allow delete: if autenticado();
+    }
+
+    match /presupuestos/{id} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && presupuestoValido();
+      allow delete: if autenticado();
+    }
+
+    match /{documento=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+EXPLICACION
+- Solo se permite acceso con sesion de Firebase (autenticacion anonima). Sin sesion no se permite nada, y cualquier coleccion no listada queda bloqueada.
+- Colecciones: clientes, repuestos, vehiculos, usuarios, fallas, diagnosticos, tareas, costos y presupuestos.
+- Cada documento valida sus campos (solo los permitidos, tipos y largos).
+- El campo uid se guarda como dato informativo. Ya no se exige que coincida al editar, para que un registro pueda editarse desde otro dispositivo o tras reinstalar la app.
+- Los roles del taller se controlan dentro de la app. Firestore solo distingue sesion valida o no.
+- IMPORTANTE: la coleccion usuarios guarda el hash PBKDF2 de las contrasenas. Cualquier cliente con sesion anonima puede leerla. Para cerrar esto de verdad hay que migrar el login a Firebase Authentication con correo y contrasena.

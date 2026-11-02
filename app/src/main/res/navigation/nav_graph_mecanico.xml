@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_mecanico"
+    app:startDestination="@id/ordenesActivasFragment">
+
+    <fragment
+        android:id="@+id/ordenesActivasFragment"
+        android:name="com.abarca.tallermecanico.ui.mecanico.OrdenesActivasFragment"
+        android:label="@string/nav_ordenes_activas"
+        tools:layout="@layout/fragment_ordenes_activas">
+        <action
+            android:id="@+id/action_ordenes_to_ficha"
+            app:destination="@id/fichaActivaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fichaActivaFragment"
+        android:name="com.abarca.tallermecanico.ui.mecanico.FichaActivaFragment"
+        android:label="@string/title_ficha_activa"
+        tools:layout="@layout/fragment_ficha_activa">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

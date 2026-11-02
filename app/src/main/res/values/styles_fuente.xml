@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TF.Texto.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+    <style name="TF.Texto.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+    <style name="TF.Texto.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+    <style name="TF.Texto.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+    <style name="TF.Texto.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+</resources>
