@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.abarca.tallermecanico.MainActivity
+import com.abarca.tallermecanico.TallerApp
 import com.abarca.tallermecanico.data.entity.RolUsuario
 import com.abarca.tallermecanico.data.entity.Usuario
 
@@ -16,6 +17,8 @@ object Sesion {
 
     fun cerrar() {
         usuarioActual = null
+        RecordarSesion.borrar()
+        TallerApp.instancia.cerrarSesionFirebase()
     }
 }
 

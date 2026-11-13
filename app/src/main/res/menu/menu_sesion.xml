@@ -6,6 +6,10 @@
         android:title="@string/menu_idioma"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_cambiar_clave"
+        android:title="@string/menu_cambiar_clave"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_logout"
         android:title="@string/menu_cerrar_sesion"
         app:showAsAction="never" />

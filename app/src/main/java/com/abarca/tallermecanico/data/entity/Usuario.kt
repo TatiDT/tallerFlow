@@ -17,4 +17,6 @@ data class Usuario(
     val password: String = "",
     val rol: RolUsuario,
     val activo: Boolean = true
-)
+) {
+    val usaCuentaCorreo: Boolean get() = password.isBlank()
+}

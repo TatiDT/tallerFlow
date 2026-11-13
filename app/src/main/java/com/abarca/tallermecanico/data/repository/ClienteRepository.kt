@@ -5,15 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import com.abarca.tallermecanico.data.entity.Cliente
 import com.abarca.tallermecanico.util.FirestoreOps
 import com.abarca.tallermecanico.util.Rut
+import com.abarca.tallermecanico.util.TallerActual
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
 object ClienteRepository {
 
-    private val coleccion get() = FirebaseFirestore.getInstance().collection("clientes")
+    private val coleccion get() = TallerActual.coleccion("clientes")
 
     private val _clientes = MutableLiveData<List<Cliente>>(emptyList())
     val clientes: LiveData<List<Cliente>> = _clientes
@@ -27,7 +27,7 @@ object ClienteRepository {
     private var registro: ListenerRegistration? = null
 
     fun iniciar() {
-        if (registro != null) return
+        if (registro != null || TallerActual.id == null) return
         registro = coleccion.addSnapshotListener { snap, error ->
             if (error != null || snap == null) {
                 error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
@@ -49,6 +49,7 @@ object ClienteRepository {
     fun reiniciar() {
         registro?.remove()
         registro = null
+        _clientes.value = emptyList()
         _error.value = null
         _cargando.value = true
     }

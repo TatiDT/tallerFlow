@@ -13,6 +13,8 @@ import com.abarca.tallermecanico.data.repository.UsuarioRepository
 import com.abarca.tallermecanico.data.repository.VehiculoRepository
 import com.abarca.tallermecanico.util.AppCheckProveedor
 import com.abarca.tallermecanico.util.Notificaciones
+import com.abarca.tallermecanico.util.RecordarSesion
+import com.abarca.tallermecanico.util.TallerActual
 import com.abarca.tallermecanico.util.Traductor
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -22,11 +24,19 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 class TallerApp : Application() {
 
+    companion object {
+        lateinit var instancia: TallerApp
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instancia = this
         FirebaseApp.initializeApp(this)
         FirebaseAppCheck.getInstance().installAppCheckProviderFactory(AppCheckProveedor.fabrica())
         Traductor.iniciar(this)
+        RecordarSesion.iniciar(this)
+        RecordarSesion.tallerId?.let { TallerActual.fijar(it) }
         Notificaciones.crearCanal(this)
         iniciarSesionFirebase()
         FirebaseMessaging.getInstance().token.addOnSuccessListener { Log.d("FCM", "Token: $it") }
@@ -55,6 +65,31 @@ class TallerApp : Application() {
     }
 
     fun reintentar() {
+        limpiarRepositorios()
+        iniciarSesionFirebase()
+    }
+
+    fun abrirTaller(id: String, nombre: String = "", codigo: String = "") {
+        if (TallerActual.id != id) {
+            limpiarRepositorios()
+            TallerActual.fijar(id, nombre, codigo)
+        }
+        iniciarRepositorios()
+    }
+
+    fun descartarTaller() {
+        limpiarRepositorios()
+        TallerActual.limpiar()
+    }
+
+    fun cerrarSesionFirebase() {
+        descartarTaller()
+        FirebaseAuth.getInstance().signOut()
+        FirebaseAuth.getInstance().signInAnonymously()
+            .addOnFailureListener { FirebaseCrashlytics.getInstance().recordException(it) }
+    }
+
+    private fun limpiarRepositorios() {
         ClienteRepository.reiniciar()
         RepuestoRepository.reiniciar()
         VehiculoRepository.reiniciar()
@@ -64,10 +99,10 @@ class TallerApp : Application() {
         TareaRepository.reiniciar()
         CostoRepository.reiniciar()
         PresupuestoRepository.reiniciar()
-        iniciarSesionFirebase()
     }
 
     private fun iniciarRepositorios() {
+        if (TallerActual.id == null) return
         ClienteRepository.iniciar()
         RepuestoRepository.iniciar()
         VehiculoRepository.iniciar()

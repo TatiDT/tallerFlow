@@ -3,6 +3,7 @@ package com.abarca.tallermecanico.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.abarca.tallermecanico.util.FirestoreOps
+import com.abarca.tallermecanico.util.TallerActual
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,13 +18,16 @@ class ColeccionFirestore<T>(
     private val alRecibir: ((QuerySnapshot) -> Unit)? = null
 ) {
 
-    private val coleccion get() = FirebaseFirestore.getInstance().collection(nombre)
+    private val coleccion get() = TallerActual.coleccion(nombre)
 
     private val _items = MutableLiveData<List<T>>(emptyList())
     val items: LiveData<List<T>> = _items
 
     private val _cargando = MutableLiveData(true)
     val cargando: LiveData<Boolean> = _cargando
+
+    private val _listo = MutableLiveData(false)
+    val listo: LiveData<Boolean> = _listo
 
     private val _error = MutableLiveData<Throwable?>(null)
     val error: LiveData<Throwable?> = _error
@@ -34,7 +38,7 @@ class ColeccionFirestore<T>(
     private var ultimoId = 0
 
     fun iniciar() {
-        if (registro != null) return
+        if (registro != null || TallerActual.id == null) return
         registro = coleccion.addSnapshotListener { snap, error ->
             if (error != null || snap == null) {
                 error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
@@ -45,6 +49,7 @@ class ColeccionFirestore<T>(
             _error.value = null
             _items.value = snap.documents.mapNotNull(deDocumento).sortedBy(idDe)
             _cargando.value = false
+            if (!snap.metadata.isFromCache || !snap.isEmpty) _listo.value = true
             alRecibir?.invoke(snap)
         }
     }
@@ -57,7 +62,10 @@ class ColeccionFirestore<T>(
     fun reiniciar() {
         registro?.remove()
         registro = null
+        ultimoId = 0
+        _items.value = emptyList()
         _error.value = null
+        _listo.value = false
         _cargando.value = true
     }
 

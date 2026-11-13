@@ -9,24 +9,17 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 object UsuarioRepository {
 
-    private const val ADMIN_INICIAL = "admin"
-    private const val CLAVE_INICIAL = "admin123"
-
-    private var sembrando = false
-
     private val coleccion = ColeccionFirestore(
         nombre = "usuarios",
         idDe = Usuario::id,
         aMapa = { it.aMapa() },
-        deDocumento = { it.aUsuario() },
-        alRecibir = { snap ->
-            if (snap.isEmpty && !snap.metadata.isFromCache && !sembrando) sembrarAdmin()
-        }
+        deDocumento = { it.aUsuario() }
     )
 
     val usuarios: LiveData<List<Usuario>> = coleccion.items
     val cargando: LiveData<Boolean> = coleccion.cargando
     val error: LiveData<Throwable?> = coleccion.error
+    val listo: LiveData<Boolean> = coleccion.listo
 
     fun iniciar() = coleccion.iniciar()
 
@@ -34,18 +27,7 @@ object UsuarioRepository {
 
     fun publicarError(causa: Throwable) = coleccion.publicarError(causa)
 
-    private fun sembrarAdmin() {
-        sembrando = true
-        val admin = Usuario(
-            id = 1,
-            nombre = "Administrador",
-            apellido = "Taller",
-            username = ADMIN_INICIAL,
-            password = PasswordUtils.hash(CLAVE_INICIAL),
-            rol = RolUsuario.ADMIN
-        )
-        coleccion.crear(admin) { sembrando = false }
-    }
+    fun mapaDe(usuario: Usuario): Map<String, Any?> = usuario.aMapa()
 
     fun insert(usuario: Usuario) = coleccion.guardar(usuario.copy(id = coleccion.siguienteId()))
 

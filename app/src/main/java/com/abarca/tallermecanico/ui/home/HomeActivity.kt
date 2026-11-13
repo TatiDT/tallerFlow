@@ -16,6 +16,8 @@ import com.abarca.tallermecanico.databinding.ActivityHomeBinding
 import com.abarca.tallermecanico.util.AnalyticsLogger
 import com.abarca.tallermecanico.util.Sesion
 import com.abarca.tallermecanico.util.irAlLogin
+import com.abarca.tallermecanico.util.mostrarCambiarClave
+import com.abarca.tallermecanico.util.mostrarCodigoTaller
 import com.abarca.tallermecanico.util.mostrarSelectorIdioma
 
 class HomeActivity : AppCompatActivity() {
@@ -64,12 +66,21 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_sesion, menu)
+        menu.add(Menu.NONE, R.id.action_codigo_taller, 0, R.string.menu_codigo_taller)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_idioma) {
             mostrarSelectorIdioma()
+            return true
+        }
+        if (item.itemId == R.id.action_codigo_taller) {
+            mostrarCodigoTaller()
+            return true
+        }
+        if (item.itemId == R.id.action_cambiar_clave) {
+            mostrarCambiarClave()
             return true
         }
         if (item.itemId == R.id.action_logout) {

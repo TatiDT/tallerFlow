@@ -6,10 +6,10 @@ import com.abarca.tallermecanico.data.entity.EstadoVehiculo
 import com.abarca.tallermecanico.data.entity.Vehiculo
 import com.abarca.tallermecanico.util.FirestoreOps
 import com.abarca.tallermecanico.util.NotificadorCorreo
+import com.abarca.tallermecanico.util.TallerActual
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
 object VehiculoRepository {
@@ -17,7 +17,7 @@ object VehiculoRepository {
     private val ESTADOS_ACTIVOS = setOf(EstadoVehiculo.INGRESADO, EstadoVehiculo.EN_REPARACION, EstadoVehiculo.TERMINADO)
     const val MAX_VEHICULOS_ACTIVOS_POR_MECANICO = 2
 
-    private val coleccion get() = FirebaseFirestore.getInstance().collection("vehiculos")
+    private val coleccion get() = TallerActual.coleccion("vehiculos")
 
     private val _vehiculos = MutableLiveData<List<Vehiculo>>(emptyList())
     val vehiculos: LiveData<List<Vehiculo>> = _vehiculos
@@ -31,7 +31,7 @@ object VehiculoRepository {
     private var registro: ListenerRegistration? = null
 
     fun iniciar() {
-        if (registro != null) return
+        if (registro != null || TallerActual.id == null) return
         registro = coleccion.addSnapshotListener { snap, error ->
             if (error != null || snap == null) {
                 error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
@@ -53,6 +53,7 @@ object VehiculoRepository {
     fun reiniciar() {
         registro?.remove()
         registro = null
+        _vehiculos.value = emptyList()
         _error.value = null
         _cargando.value = true
     }

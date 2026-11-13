@@ -5,7 +5,14 @@
 
     <!-- Login -->
     <string name="login_title">Iniciar Sesión</string>
-    <string name="hint_username_login">Nombre de usuario</string>
+    <string name="hint_username_login">Usuario o correo</string>
+    <string name="hint_codigo_taller">Código del taller</string>
+    <string name="helper_codigo_taller">Te lo entrega el administrador de tu taller</string>
+    <string name="link_registro">¿No tienes cuenta? Regístrate</string>
+    <string name="error_codigo_requerido">Ingresa el código de tu taller</string>
+    <string name="error_codigo_invalido">El código del taller no existe</string>
+    <string name="error_taller_sin_conexion">No se pudo conectar con el taller. Revisa tu conexión</string>
+    <string name="error_cuenta_sin_taller">Esta cuenta no tiene un taller asociado</string>
     <string name="hint_password">Contraseña</string>
     <string name="btn_login">Ingresar</string>
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
@@ -13,6 +20,36 @@
     <string name="error_password_required">Ingresa tu contraseña</string>
     <string name="error_password_short">La contraseña debe tener al menos 6 caracteres</string>
     <string name="error_login_invalido">Usuario o contraseña incorrectos</string>
+    <string name="recordarme">Recordarme</string>
+    <string name="registro_titulo">Crea tu taller</string>
+    <string name="registro_subtitulo">Tú serás la administradora de tu taller</string>
+    <string name="hint_nombre_taller">Nombre del taller</string>
+    <string name="hint_correo">Correo electrónico</string>
+    <string name="btn_crear_taller">Crear mi taller</string>
+    <string name="link_ya_tienes_cuenta">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="error_taller_requerido">Ingresa el nombre de tu taller</string>
+    <string name="error_nombre_requerido">Ingresa tu nombre</string>
+    <string name="error_apellido_requerido">Ingresa tu apellido</string>
+    <string name="error_correo_invalido">Ingresa un correo válido</string>
+    <string name="error_correo_en_uso">Ya existe una cuenta con este correo</string>
+    <string name="error_registro">No se pudo crear el taller. Intenta nuevamente</string>
+    <string name="msg_olvido_clave">Pide al administrador del taller que restablezca tu contraseña desde la sección Usuarios.</string>
+    <string name="menu_cambiar_clave">Cambiar contraseña</string>
+    <string name="title_cambiar_clave">Cambiar contraseña</string>
+    <string name="hint_clave_actual">Contraseña actual</string>
+    <string name="hint_clave_nueva">Nueva contraseña (mín. 6 caracteres)</string>
+    <string name="hint_clave_confirmar">Confirmar nueva contraseña</string>
+    <string name="error_clave_actual">La contraseña actual no es correcta</string>
+    <string name="error_clave_igual">La nueva contraseña debe ser distinta a la actual</string>
+    <string name="error_clave_no_coincide">Las contraseñas no coinciden</string>
+    <string name="msg_clave_cambiada">Contraseña actualizada</string>
+    <string name="error_cambio_clave">No se pudo cambiar la contraseña. Intenta nuevamente</string>
+    <string name="menu_codigo_taller">Código del taller</string>
+    <string name="title_codigo_taller">Código de tu taller</string>
+    <string name="msg_codigo_taller">Entrega este código a tu personal. Lo necesitan junto con su usuario y contraseña para ingresar.</string>
+    <string name="msg_codigo_cargando">Cargando…</string>
+    <string name="btn_copiar">Copiar</string>
+    <string name="msg_codigo_copiado">Código copiado</string>
 
     <!-- Navegación -->
     <string name="nav_clientes">Clientes</string>

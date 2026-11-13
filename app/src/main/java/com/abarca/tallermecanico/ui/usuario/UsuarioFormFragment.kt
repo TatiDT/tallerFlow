@@ -58,6 +58,13 @@ class UsuarioFormFragment : Fragment() {
                 binding.etEmail.setText(u.email)
                 binding.actvRol.setText(u.rol.display, false)
                 binding.switchActivo.isChecked = u.activo
+                if (u.usaCuentaCorreo) {
+                    binding.tilPassword.visibility = View.GONE
+                    binding.etUsername.isEnabled = false
+                    binding.etEmail.isEnabled = false
+                    binding.actvRol.isEnabled = false
+                    binding.switchActivo.isEnabled = false
+                }
             }
         }
         savedInstanceState?.getString(KEY_ROL)?.let {
