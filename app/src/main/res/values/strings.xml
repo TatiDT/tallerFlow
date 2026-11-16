@@ -348,4 +348,12 @@
     <string name="label_agenda_vehiculo">Vehículo: %1$s · %2$s</string>
     <string name="label_agenda_mecanico">Mecánico: %1$s</string>
     <string name="label_agenda_duracion">%1$s · %2$d min</string>
+
+    <string name="escanear_codigo_repuesto">Escanear código de barras</string>
+    <string name="guia_escanear_codigo_repuesto">Coloca el código de barras dentro del recuadro</string>
+    <string name="error_codigo_escaneado_largo">El código de barras supera los 30 caracteres permitidos</string>
+    <string name="btn_webpay_simulado">Pagar con Webpay</string>
+    <string name="msg_webpay_requiere_presupuesto">Para simular un pago, primero aprueba un presupuesto con un total mayor a cero para este vehículo.</string>
+    <string name="msg_webpay_configurar">Configura la dirección del servicio local de Webpay.</string>
+    <string name="msg_webpay_sin_navegador">Se necesita un navegador para abrir Webpay.</string>
 </resources>

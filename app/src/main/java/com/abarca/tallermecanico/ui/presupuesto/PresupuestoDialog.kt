@@ -1,12 +1,18 @@
 package com.abarca.tallermecanico.ui.presupuesto
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.graphics.Paint
+import android.widget.Toast
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import com.abarca.tallermecanico.BuildConfig
 import com.abarca.tallermecanico.R
+import kotlin.math.roundToLong
 import com.abarca.tallermecanico.data.entity.Adicional
 import com.abarca.tallermecanico.data.entity.EstadoAdicional
 import com.abarca.tallermecanico.data.entity.Falla
@@ -119,7 +125,14 @@ class PresupuestoDialog(
             .setView(binding.root)
 
         if (modo == Modo.VER) {
-            builder.setPositiveButton(R.string.btn_cerrar, null).show()
+            builder.setPositiveButton(R.string.btn_cerrar, null)
+            if (puedeResponderAdicionales && presupuesto?.aprobado == true) {
+                builder.setNeutralButton(R.string.btn_webpay_simulado, null)
+            }
+            val dialog = builder.show()
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
+                mostrarWebpaySimulado()
+            }
             return
         }
 
@@ -163,6 +176,35 @@ class PresupuestoDialog(
             }
         }
         dialog.show()
+    }
+
+    fun mostrarWebpaySimulado() {
+        if (!puedeResponderAdicionales) return
+        val ctx = fragment.requireContext()
+        val actual = viewModel.getByVehiculoId(vehiculoId)
+        if (actual == null || !actual.aprobado || !actual.total.isFinite() || actual.total <= 0) {
+            MaterialAlertDialogBuilder(ctx)
+                .setTitle(R.string.btn_webpay_simulado)
+                .setMessage(R.string.msg_webpay_requiere_presupuesto)
+                .setPositiveButton(R.string.btn_cerrar, null)
+                .show()
+            return
+        }
+        val base = Uri.parse(BuildConfig.WEBPAY_TEST_URL)
+        val monto = actual.total.roundToLong()
+        if (base.scheme !in listOf("http", "https") || base.host.isNullOrBlank()) {
+            Toast.makeText(ctx, R.string.msg_webpay_configurar, Toast.LENGTH_LONG).show()
+            return
+        }
+        val destino = base.buildUpon()
+            .appendPath("iniciar")
+            .appendQueryParameter("monto", monto.toString())
+            .build()
+        try {
+            fragment.startActivity(Intent(Intent.ACTION_VIEW, destino))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(ctx, R.string.msg_webpay_sin_navegador, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun agregarFilaFalla(falla: Falla, numero: Int) {
@@ -305,6 +347,13 @@ class PresupuestoDialog(
         else 0.0
 
     private fun actualizarTotales() {
+        if (modo == Modo.VER) {
+            val actual = viewModel.getByVehiculoId(vehiculoId) ?: return
+            binding.tvNeto.text = Formato.pesos(actual.neto)
+            binding.tvIva.text = Formato.pesos(actual.iva)
+            binding.tvTotal.text = Formato.pesos(actual.total)
+            return
+        }
         val neto = opciones.filter { it.id in seleccionados }.sumOf { it.precio } + montoFallas() + montoOtro() + montoAdicionales()
         val iva = Presupuesto.calcularIva(neto)
         binding.tvNeto.text = Formato.pesos(neto)

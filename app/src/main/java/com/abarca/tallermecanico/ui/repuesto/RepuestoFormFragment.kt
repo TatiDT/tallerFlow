@@ -13,6 +13,8 @@ import com.abarca.tallermecanico.ui.viewmodel.RepuestoViewModel
 import com.abarca.tallermecanico.util.AnalyticsLogger
 import com.abarca.tallermecanico.util.FirestoreOps
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 class RepuestoFormFragment : Fragment() {
 
@@ -21,6 +23,17 @@ class RepuestoFormFragment : Fragment() {
     private val viewModel: RepuestoViewModel by activityViewModels()
     private var entityId = -1
     private var currentRepuesto: Repuesto? = null
+
+    private val escanerCodigo = registerForActivityResult(ScanContract()) { resultado ->
+        val codigo = resultado.contents ?: return@registerForActivityResult
+        val formulario = _binding ?: return@registerForActivityResult
+        if (codigo.length > 30) {
+            formulario.tilCodigoRepuesto.error = getString(R.string.error_codigo_escaneado_largo)
+        } else {
+            formulario.tilCodigoRepuesto.error = null
+            formulario.etCodigoRepuesto.setText(codigo)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +62,14 @@ class RepuestoFormFragment : Fragment() {
             }
         }
 
+        binding.tilCodigoRepuesto.setEndIconOnClickListener {
+            escanerCodigo.launch(ScanOptions().apply {
+                setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES)
+                setPrompt(getString(R.string.guia_escanear_codigo_repuesto))
+                setBeepEnabled(false)
+                setOrientationLocked(false)
+            })
+        }
         binding.btnGuardar.setOnClickListener { guardar() }
     }
 
@@ -108,6 +129,7 @@ class RepuestoFormFragment : Fragment() {
     private fun mostrarCarga(cargando: Boolean) {
         binding.progress.visibility = if (cargando) View.VISIBLE else View.GONE
         binding.btnGuardar.isEnabled = !cargando
+        binding.tilCodigoRepuesto.isEndIconVisible = !cargando
     }
 
     @Deprecated("Deprecated in Java")

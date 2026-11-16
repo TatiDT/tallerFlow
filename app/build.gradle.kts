@@ -26,6 +26,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        val webpayTestUrl = propiedadesLocales.getProperty("webpay.testUrl", "http://127.0.0.1:8787")
+        require(webpayTestUrl.matches(Regex("https?://[a-zA-Z0-9.:-]+/?")))
+        buildConfigField("String", "WEBPAY_TEST_URL", "\"$webpayTestUrl\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${propiedadesLocales.getProperty("google.webClientId", "")}\"")
         buildConfigField("String", "CORREO_URL", "\"${propiedadesLocales.getProperty("correo.url", "")}\"")
         buildConfigField("String", "CORREO_TOKEN", "\"${propiedadesLocales.getProperty("correo.token", "")}\"")
@@ -57,6 +60,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 dependencies {
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
