@@ -24,3 +24,5 @@ google-services.json
 .kotlin
 /.idea/*.xml
 !/.idea/codeStyles
+
+webpay/node_modules/
