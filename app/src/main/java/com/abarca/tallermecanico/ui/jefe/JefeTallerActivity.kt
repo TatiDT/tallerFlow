@@ -50,7 +50,8 @@ class JefeTallerActivity : AppCompatActivity() {
 
         val topDestinations = setOf(
             R.id.clienteFragment,
-            R.id.vehiculoFragment
+            R.id.vehiculoFragment,
+            R.id.agendaFragment
         )
         val appBarConfig = AppBarConfiguration(topDestinations)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)

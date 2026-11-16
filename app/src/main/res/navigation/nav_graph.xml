@@ -117,4 +117,47 @@
             android:defaultValue="-1" />
     </fragment>
 
+    <fragment
+        android:id="@+id/agendaFragment"
+        android:name="com.abarca.tallermecanico.ui.agenda.AgendaFragment"
+        android:label="@string/nav_agenda"
+        tools:layout="@layout/fragment_agenda">
+        <action
+            android:id="@+id/action_agenda_to_form"
+            app:destination="@id/agendaFormFragment" />
+        <action
+            android:id="@+id/action_agenda_to_detalle"
+            app:destination="@id/agendaDetalleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/agendaFormFragment"
+        android:name="com.abarca.tallermecanico.ui.agenda.AgendaFormFragment"
+        android:label="@string/title_nueva_cita"
+        tools:layout="@layout/fragment_agenda_form">
+        <argument
+            android:name="tipo"
+            app:argType="string"
+            android:defaultValue="CITA" />
+        <argument
+            android:name="vehiculoId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/agendaDetalleFragment"
+        android:name="com.abarca.tallermecanico.ui.agenda.AgendaDetalleFragment"
+        android:label="@string/title_detalle_agenda"
+        tools:layout="@layout/fragment_agenda_detalle">
+        <argument
+            android:name="tipo"
+            app:argType="string"
+            android:defaultValue="CITA" />
+        <argument
+            android:name="eventoId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
 </navigation>

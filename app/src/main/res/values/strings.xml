@@ -295,4 +295,57 @@
     <string name="btn_cliente_rechaza">Cliente rechaza</string>
     <string name="label_adicionales_por_cotizar">%1$d adicional(es) esperando respuesta del cliente</string>
     <string name="reintentar">Reintentar</string>
+
+    <string name="nav_agenda">Agenda</string>
+    <string name="menu_nueva_cita">Nueva cita</string>
+    <string name="menu_programar_intervencion">Programar intervención</string>
+    <string name="title_nueva_cita">Nueva cita</string>
+    <string name="title_programar_intervencion">Programar intervención</string>
+    <string name="title_detalle_agenda">Detalle de la agenda</string>
+    <string name="empty_agenda">No hay citas ni intervenciones agendadas.\nToca \"Nueva cita\" para crear una.</string>
+    <string name="hint_servicio">Servicio</string>
+    <string name="hint_trabajo">Trabajo a realizar</string>
+    <string name="hint_vehiculo">Vehículo</string>
+    <string name="hint_correo_cliente">Correo del cliente</string>
+    <string name="hint_fecha">Fecha</string>
+    <string name="hint_hora">Hora</string>
+    <string name="hint_duracion">Duración (minutos)</string>
+    <string name="msg_aviso_invitacion">El cliente recibirá una invitación de Google Calendar en su correo. Debe ser distinto a la cuenta Google del taller.</string>
+    <string name="error_fecha_requerida">Selecciona una fecha</string>
+    <string name="error_hora_requerida">Selecciona una hora</string>
+    <string name="error_fecha_pasada">La fecha y la hora deben ser futuras</string>
+    <string name="error_duracion_invalida">Ingresa una duración entre 15 y 720 minutos</string>
+
+    <string name="cal_cuenta_conectada">Google Calendar conectado: %1$s</string>
+    <string name="cal_cuenta_conectada_sin_correo">Google Calendar conectado</string>
+    <string name="cal_cuenta_desconectada">Google Calendar no está conectado en este dispositivo</string>
+    <string name="cal_btn_conectar">Conectar cuenta Google del taller</string>
+    <string name="cal_btn_desconectar">Desconectar</string>
+    <string name="cal_btn_sync_pendientes">Sincronizar pendientes (%1$d)</string>
+    <string name="cal_confirm_desconectar">Se revocará el permiso de la app sobre el calendario. Las citas nuevas quedarán pendientes de sincronizar.</string>
+    <string name="cal_msg_conectada">Cuenta Google conectada</string>
+    <string name="cal_msg_desconectada">Cuenta Google desconectada</string>
+    <string name="cal_msg_sync_resultado">Sincronizadas: %1$d · Con error: %2$d</string>
+    <string name="cal_msg_sincronizada">Guardado y sincronizado con Google Calendar</string>
+    <string name="cal_msg_guardada_sin_sync">Guardado, pero sin sincronizar con Google Calendar: %1$s</string>
+    <string name="cal_sync_ok">Sincronizada con Google Calendar</string>
+    <string name="cal_sync_pendiente">Pendiente de sincronizar</string>
+    <string name="cal_sync_error">Sin sincronizar: %1$s</string>
+    <string name="cal_error_autorizar">No se pudo conectar la cuenta Google</string>
+    <string name="cal_error_no_conectado">La cuenta Google del taller no está conectada en este dispositivo</string>
+    <string name="cal_error_sin_conexion">Sin conexión con Google</string>
+    <string name="cal_error_permiso">Permiso vencido o revocado: vuelve a conectar la cuenta Google del taller</string>
+    <string name="cal_error_google">Google Calendar respondió con error %1$d</string>
+    <string name="cal_error_generico">No se pudo sincronizar con Google Calendar</string>
+
+    <string name="btn_reprogramar">Reprogramar</string>
+    <string name="btn_cancelar_cita">Cancelar cita</string>
+    <string name="btn_marcar_realizada">Marcar como realizada</string>
+    <string name="btn_reintentar_sync">Reintentar sincronización</string>
+    <string name="confirm_cancelar_cita_title">Cancelar</string>
+    <string name="confirm_cancelar_cita_message">Se eliminará el evento de Google Calendar y se avisará al cliente por correo.</string>
+    <string name="label_agenda_cliente">Cliente: %1$s (%2$s)</string>
+    <string name="label_agenda_vehiculo">Vehículo: %1$s · %2$s</string>
+    <string name="label_agenda_mecanico">Mecánico: %1$s</string>
+    <string name="label_agenda_duracion">%1$s · %2$d min</string>
 </resources>

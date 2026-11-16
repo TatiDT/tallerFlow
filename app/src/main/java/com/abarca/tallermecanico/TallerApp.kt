@@ -2,6 +2,7 @@ package com.abarca.tallermecanico
 
 import android.app.Application
 import android.util.Log
+import com.abarca.tallermecanico.data.repository.AgendaRepository
 import com.abarca.tallermecanico.data.repository.ClienteRepository
 import com.abarca.tallermecanico.data.repository.CostoRepository
 import com.abarca.tallermecanico.data.repository.DiagnosticoRepository
@@ -61,6 +62,7 @@ class TallerApp : Application() {
                 TareaRepository.publicarError(it)
                 CostoRepository.publicarError(it)
                 PresupuestoRepository.publicarError(it)
+                AgendaRepository.publicarError(it)
             }
     }
 
@@ -99,6 +101,7 @@ class TallerApp : Application() {
         TareaRepository.reiniciar()
         CostoRepository.reiniciar()
         PresupuestoRepository.reiniciar()
+        AgendaRepository.reiniciar()
     }
 
     private fun iniciarRepositorios() {
@@ -112,5 +115,6 @@ class TallerApp : Application() {
         TareaRepository.iniciar()
         CostoRepository.iniciar()
         PresupuestoRepository.iniciar()
+        AgendaRepository.iniciar()
     }
 }

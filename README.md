@@ -9,6 +9,7 @@ Aplicación Android para la gestión de un taller mecánico: clientes, vehículo
 - Asistente de chat con Gemini (Firebase AI Logic) disponible desde cualquier pantalla.
 - Traducción de los textos de la aplicación con ML Kit.
 - Correos automáticos al cliente mediante Google Apps Script.
+- Agenda de citas e intervenciones sincronizada con Google Calendar (ver `docs/AGENDA_GOOGLE_CALENDAR.md`).
 
 ## Configuración para compilar
 
@@ -21,6 +22,8 @@ Estos archivos no se incluyen en el repositorio porque contienen datos privados:
 correo.url=URL_DE_LA_APLICACION_WEB_DE_APPS_SCRIPT
 correo.token=CLAVE_COMPARTIDA_CON_EL_SCRIPT
 google.webClientId=ID_DE_CLIENTE_WEB.apps.googleusercontent.com
+taller.direccion=DIRECCION_QUE_APARECE_EN_LOS_EVENTOS
+taller.telefono=TELEFONO_DE_CONTACTO_DEL_TALLER
 ```
 
 3. Reglas de Firestore: el contenido de `ReglasFirebase.txt` (hasta antes de `EXPLICACION`) se publica en Firestore → Reglas.

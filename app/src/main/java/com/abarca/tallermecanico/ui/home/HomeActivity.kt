@@ -53,7 +53,8 @@ class HomeActivity : AppCompatActivity() {
             R.id.clienteFragment,
             R.id.vehiculoFragment,
             R.id.repuestoFragment,
-            R.id.usuarioFragment
+            R.id.usuarioFragment,
+            R.id.agendaFragment
         )
         val appBarConfig = AppBarConfiguration(topDestinations)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)

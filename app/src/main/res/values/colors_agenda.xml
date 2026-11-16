@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="agenda_ok">#8FD19E</color>
+    <color name="agenda_alerta">#FFB59E</color>
+</resources>

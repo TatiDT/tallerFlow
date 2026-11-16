@@ -284,6 +284,8 @@ class VehiculoFormFragment : Fragment() {
             val estado = vehiculoViewModel.getById(entityId)?.estado
             menu.findItem(R.id.action_inspeccion)?.isVisible = esJefe
             menu.findItem(R.id.action_costos)?.isVisible = esJefe
+            menu.findItem(R.id.action_programar_intervencion)?.isVisible = (esJefe || esAdmin) &&
+                (estado == EstadoVehiculo.INGRESADO || estado == EstadoVehiculo.EN_REPARACION)
             menu.findItem(R.id.action_aprobar_trabajo)?.isVisible = esJefe && estado == EstadoVehiculo.TERMINADO
             menu.findItem(R.id.action_devolver)?.isVisible = esJefe && estado == EstadoVehiculo.TERMINADO
             menu.findItem(R.id.action_entregar)?.isVisible = esAdmin && estado == EstadoVehiculo.LISTO
@@ -298,6 +300,14 @@ class VehiculoFormFragment : Fragment() {
         if (item.itemId == R.id.action_inspeccion) {
             val bundle = Bundle().apply { putInt("vehiculoId", entityId) }
             findNavController().navigate(R.id.action_vehiculo_form_to_inspeccion, bundle)
+            return true
+        }
+        if (item.itemId == R.id.action_programar_intervencion) {
+            val bundle = Bundle().apply {
+                putString("tipo", "INTERVENCION")
+                putInt("vehiculoId", entityId)
+            }
+            findNavController().navigate(R.id.agendaFormFragment, bundle)
             return true
         }
         if (item.itemId == R.id.action_costos) {

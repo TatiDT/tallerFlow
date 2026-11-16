@@ -8,4 +8,8 @@
         android:id="@+id/vehiculoFragment"
         android:icon="@drawable/ic_nav_vehiculo"
         android:title="@string/nav_vehiculos" />
+    <item
+        android:id="@+id/agendaFragment"
+        android:icon="@drawable/ic_nav_agenda"
+        android:title="@string/nav_agenda" />
 </menu>

@@ -127,6 +127,44 @@ service cloud.firestore {
         && d.adicionales is list && d.adicionales.size() <= 100;
     }
 
+    function agendaComunValida(d) {
+      return d.id is int
+        && textoValido(d.clienteNombre, 120)
+        && d.clienteEmail is string
+        && d.clienteEmail.size() <= 120
+        && d.clienteEmail.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && textoValido(d.vehiculoPatente, 12)
+        && textoOpcional(d.vehiculoDescripcion, 120)
+        && d.inicio is timestamp
+        && d.duracionMin is int && d.duracionMin >= 15 && d.duracionMin <= 720
+        && d.estado in ['agendada', 'reprogramada', 'cancelada', 'realizada']
+        && textoOpcional(d.eventId, 200)
+        && textoOpcional(d.syncError, 300)
+        && d.creadoEn is timestamp
+        && d.actualizadoEn is timestamp;
+    }
+
+    function citaValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'clienteNombre', 'clienteEmail', 'vehiculoPatente',
+          'vehiculoDescripcion', 'servicio', 'inicio', 'duracionMin', 'estado', 'eventId', 'syncError',
+          'creadoEn', 'actualizadoEn'])
+        && agendaComunValida(d)
+        && textoValido(d.servicio, 120);
+    }
+
+    function intervencionValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'ordenTrabajoId', 'clienteNombre', 'clienteEmail', 'vehiculoPatente',
+          'vehiculoDescripcion', 'descripcion', 'mecanicoNombre', 'mecanicoEmail', 'inicio', 'duracionMin',
+          'estado', 'eventId', 'syncError', 'creadoEn', 'actualizadoEn'])
+        && agendaComunValida(d)
+        && d.ordenTrabajoId is int
+        && textoValido(d.descripcion, 120)
+        && textoOpcional(d.mecanicoNombre, 120)
+        && textoOpcional(d.mecanicoEmail, 120);
+    }
+
     function tallerValido(tallerId) {
       let d = request.resource.data;
       return d.keys().hasOnly(['nombre', 'ownerUid', 'codigo'])
@@ -203,6 +241,18 @@ service cloud.firestore {
         allow read: if autenticado();
         allow create, update: if autenticado() && presupuestoValido();
         allow delete: if autenticado();
+      }
+
+      match /citas/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && citaValida();
+        allow delete: if false;
+      }
+
+      match /intervenciones/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && intervencionValida();
+        allow delete: if false;
       }
     }
 

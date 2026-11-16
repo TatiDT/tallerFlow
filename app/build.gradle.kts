@@ -29,6 +29,8 @@ android {
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${propiedadesLocales.getProperty("google.webClientId", "")}\"")
         buildConfigField("String", "CORREO_URL", "\"${propiedadesLocales.getProperty("correo.url", "")}\"")
         buildConfigField("String", "CORREO_TOKEN", "\"${propiedadesLocales.getProperty("correo.token", "")}\"")
+        buildConfigField("String", "TALLER_DIRECCION", "\"${propiedadesLocales.getProperty("taller.direccion", "").replace("\"", "\\\"")}\"")
+        buildConfigField("String", "TALLER_TELEFONO", "\"${propiedadesLocales.getProperty("taller.telefono", "").replace("\"", "\\\"")}\"")
     }
 
     buildTypes {
@@ -78,6 +80,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play)
     implementation(libs.googleid)
+    implementation(libs.play.services.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

@@ -16,4 +16,8 @@
         android:id="@+id/usuarioFragment"
         android:icon="@drawable/ic_nav_usuario"
         android:title="@string/nav_usuarios" />
+    <item
+        android:id="@+id/agendaFragment"
+        android:icon="@drawable/ic_nav_agenda"
+        android:title="@string/nav_agenda" />
 </menu>
