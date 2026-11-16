@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.WriteBatch
 
 class ColeccionFirestore<T>(
     private val nombre: String,
@@ -39,6 +40,9 @@ class ColeccionFirestore<T>(
 
     fun iniciar() {
         if (registro != null || TallerActual.id == null) return
+        _error.value = null
+        _cargando.value = true
+        _listo.value = false
         registro = coleccion.addSnapshotListener { snap, error ->
             if (error != null || snap == null) {
                 error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
@@ -74,14 +78,15 @@ class ColeccionFirestore<T>(
         return ultimoId
     }
 
-    fun guardar(item: T) = guardarVarios(listOf(item))
+    fun guardar(item: T, extra: (WriteBatch) -> Unit = {}) = guardarVarios(listOf(item), extra)
 
-    fun guardarVarios(nuevos: List<T>) {
+    fun guardarVarios(nuevos: List<T>, extra: (WriteBatch) -> Unit = {}) {
         if (nuevos.isEmpty()) return
         val ids = nuevos.map(idDe).toSet()
         _items.value = (valor.filter { idDe(it) !in ids } + nuevos).sortedBy(idDe)
         val lote = FirebaseFirestore.getInstance().batch()
         nuevos.forEach { lote.set(coleccion.document(idDe(it).toString()), aMapa(it)) }
+        extra(lote)
         lote.commit().addOnFailureListener { FirebaseCrashlytics.getInstance().recordException(it) }
     }
 
@@ -89,15 +94,16 @@ class ColeccionFirestore<T>(
         FirestoreOps.guardar(coleccion.document(idDe(item).toString()), aMapa(item), true, alTerminar)
     }
 
-    fun eliminar(id: Int) = eliminarDonde { idDe(it) == id }
+    fun eliminar(id: Int, extra: (WriteBatch) -> Unit = {}) = eliminarDonde(extra) { idDe(it) == id }
 
-    fun eliminarDonde(condicion: (T) -> Boolean) {
+    fun eliminarDonde(extra: (WriteBatch) -> Unit = {}, condicion: (T) -> Boolean) {
         val objetivo = valor.filter(condicion)
         if (objetivo.isEmpty()) return
         val ids = objetivo.map(idDe).toSet()
         _items.value = valor.filter { idDe(it) !in ids }
         val lote = FirebaseFirestore.getInstance().batch()
         ids.forEach { lote.delete(coleccion.document(it.toString())) }
+        extra(lote)
         lote.commit().addOnFailureListener { FirebaseCrashlytics.getInstance().recordException(it) }
     }
 }

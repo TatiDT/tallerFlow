@@ -11,7 +11,8 @@ class UsuarioViewModel : ViewModel() {
 
     fun insert(usuario: Usuario) = UsuarioRepository.insert(usuario)
 
-    fun update(usuario: Usuario) = UsuarioRepository.update(usuario)
+    fun update(usuario: Usuario, verificadorPropio: String? = null) =
+        UsuarioRepository.update(usuario, verificadorPropio)
 
     fun delete(usuario: Usuario) = UsuarioRepository.delete(usuario)
 

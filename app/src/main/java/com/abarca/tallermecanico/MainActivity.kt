@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.abarca.tallermecanico.data.entity.RolUsuario
 import com.abarca.tallermecanico.data.entity.Usuario
+import com.abarca.tallermecanico.data.repository.AccesoPersonal
 import com.abarca.tallermecanico.data.repository.TallerRepository
 import com.abarca.tallermecanico.data.repository.UsuarioRepository
 import com.abarca.tallermecanico.databinding.ActivityMainBinding
@@ -194,12 +195,22 @@ class MainActivity : AppCompatActivity() {
                     binding.tilTaller.error = getString(R.string.error_codigo_invalido)
                     enCurso(false)
                 }
-                else -> abrirTallerYEntrar(
-                    idTaller = idTaller,
-                    mensajeFallo = R.string.error_login_invalido,
-                    cerrarCuenta = false,
-                    alEntrar = { RecordarSesion.ultimoCodigo = codigo }
-                ) { UsuarioRepository.autenticar(username, password) }
+                else -> AccesoPersonal.ingresar(idTaller, username, password) { usuarioId, errorIngreso ->
+                    if (isFinishing || isDestroyed) return@ingresar
+                    when {
+                        errorIngreso != null -> mostrarError(R.string.error_taller_sin_conexion)
+                        usuarioId == null -> {
+                            AnalyticsLogger.logLoginFallido(this)
+                            mostrarError(R.string.error_login_invalido)
+                        }
+                        else -> abrirTallerYEntrar(
+                            idTaller = idTaller,
+                            mensajeFallo = R.string.error_login_invalido,
+                            cerrarCuenta = false,
+                            alEntrar = { RecordarSesion.ultimoCodigo = codigo }
+                        ) { UsuarioRepository.getById(usuarioId)?.takeIf { it.activo && !it.usaCuentaCorreo } }
+                    }
+                }
             }
         }
     }

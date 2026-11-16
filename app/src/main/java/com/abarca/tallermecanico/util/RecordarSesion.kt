@@ -58,12 +58,15 @@ object RecordarSesion {
         val hash = almacenadas.getString(CLAVE_HASH, null)
         if (id == -1 || hash == null) return null
         val usuario = UsuarioRepository.getById(id) ?: return null
-        if (!usuario.activo || usuario.password != hash || !cuentaVigente(usuario)) {
+        if (!usuario.activo || usuario.password != hash || !cuentaVigente(usuario) || !claveVigente(usuario)) {
             borrar()
             return null
         }
         return usuario
     }
+
+    private fun claveVigente(usuario: Usuario): Boolean =
+        usuario.usaCuentaCorreo || PasswordUtils.esFormatoActual(usuario.password)
 
     private fun cuentaVigente(usuario: Usuario): Boolean {
         if (!usuario.usaCuentaCorreo) return true

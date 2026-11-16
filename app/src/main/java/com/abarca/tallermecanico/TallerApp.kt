@@ -75,6 +75,8 @@ class TallerApp : Application() {
         if (TallerActual.id != id) {
             limpiarRepositorios()
             TallerActual.fijar(id, nombre, codigo)
+        } else if (TallerActual.codigo.isEmpty()) {
+            TallerActual.fijar(id, nombre, codigo)
         }
         iniciarRepositorios()
     }

@@ -19,6 +19,7 @@
     <string name="error_username_required">Ingresa tu nombre de usuario</string>
     <string name="error_password_required">Ingresa tu contraseña</string>
     <string name="error_password_short">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_clave_reasignar">Por seguridad, asigna una contraseña nueva a este usuario</string>
     <string name="error_login_invalido">Usuario o contraseña incorrectos</string>
     <string name="recordarme">Recordarme</string>
     <string name="registro_titulo">Crea tu taller</string>

@@ -55,8 +55,9 @@ fun Activity.mostrarCambiarClave() {
                 botonGuardar.isEnabled = false
                 cambiarClaveCorreo(actual, nueva, binding, dialogo, botonGuardar)
             } else {
-                val actualizado = usuario.copy(password = PasswordUtils.hash(nueva))
-                UsuarioRepository.update(actualizado)
+                val clave = PasswordUtils.nueva(nueva)
+                val actualizado = usuario.copy(password = clave.almacenado)
+                UsuarioRepository.update(actualizado, clave.verificador)
                 terminarCambio(actualizado)
                 dialogo.dismiss()
             }

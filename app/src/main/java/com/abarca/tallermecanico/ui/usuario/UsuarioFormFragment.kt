@@ -15,6 +15,7 @@ import com.abarca.tallermecanico.ui.viewmodel.UsuarioViewModel
 import com.abarca.tallermecanico.ui.viewmodel.VehiculoViewModel
 import com.abarca.tallermecanico.util.AnalyticsLogger
 import com.abarca.tallermecanico.util.PasswordUtils
+import com.abarca.tallermecanico.util.RecordarSesion
 import com.abarca.tallermecanico.util.Sesion
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -111,6 +112,9 @@ class UsuarioFormFragment : Fragment() {
         if ((entityId == -1 || password.isNotEmpty()) && password.length < 6) {
             binding.tilPassword.error = getString(R.string.error_password_short)
             isValid = false
+        } else if (password.isEmpty() && currentUsuario?.let { !it.usaCuentaCorreo && !PasswordUtils.esFormatoActual(it.password) } == true) {
+            binding.tilPassword.error = getString(R.string.error_clave_reasignar)
+            isValid = false
         } else binding.tilPassword.error = null
 
         if (!isValid) return
@@ -133,12 +137,8 @@ class UsuarioFormFragment : Fragment() {
             return
         }
 
-        // El login compara contra el hash, así que la contraseña nueva se guarda hasheada
-        val passwordFinal = when {
-            password.isNotEmpty() -> PasswordUtils.hash(password)
-            currentUsuario != null -> currentUsuario!!.password
-            else -> ""
-        }
+        val claveNueva = if (password.isNotEmpty()) PasswordUtils.nueva(password) else null
+        val passwordFinal = claveNueva?.almacenado ?: currentUsuario?.password ?: ""
 
         val usuario = Usuario(
             id = currentUsuario?.id ?: 0,
@@ -154,7 +154,11 @@ class UsuarioFormFragment : Fragment() {
             viewModel.insert(usuario)
             AnalyticsLogger.logCrud(requireContext(), "usuario", "crear")
         } else {
-            viewModel.update(usuario)
+            viewModel.update(usuario, claveNueva?.verificador)
+            if (usuario.id == Sesion.usuarioActual?.id) {
+                Sesion.usuarioActual = usuario
+                RecordarSesion.actualizarSiGuardada(usuario)
+            }
             AnalyticsLogger.logCrud(requireContext(), "usuario", "editar")
         }
         findNavController().popBackStack()
