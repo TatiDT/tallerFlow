@@ -3,12 +3,9 @@ package com.abarca.tallermecanico.ui.agenda
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -41,15 +38,10 @@ class AgendaFragment : Fragment() {
         runCatching { CalendarioGoogle.resultadoDeIntent(ctx, resultado.data) }
             .onSuccess {
                 CalendarioGoogle.registrarConexion(ctx, it)
-                Toast.makeText(ctx, R.string.cal_msg_conectada, Toast.LENGTH_SHORT).show()
+                Aviso.mostrar(ctx, R.string.cal_msg_conectada)
                 refrescarCabecera()
             }
-            .onFailure { Toast.makeText(ctx, R.string.cal_error_autorizar, Toast.LENGTH_LONG).show() }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+            .onFailure { Aviso.mostrar(ctx, R.string.cal_error_autorizar) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -79,6 +71,9 @@ class AgendaFragment : Fragment() {
 
         binding.btnConectar.setOnClickListener { alPulsarConectar() }
         binding.btnSync.setOnClickListener { sincronizarPendientes() }
+        binding.fabNueva.setOnClickListener {
+            findNavController().navigate(R.id.action_agenda_to_form, bundleOf("tipo" to "INTERVENCION"))
+        }
         refrescarCabecera()
     }
 
@@ -115,7 +110,7 @@ class AgendaFragment : Fragment() {
                 .setPositiveButton(R.string.btn_confirmar) { _, _ ->
                     CoroutineScope(Dispatchers.Main).launch {
                         CalendarioGoogle.desconectar(ctx)
-                        Toast.makeText(ctx, R.string.cal_msg_desconectada, Toast.LENGTH_SHORT).show()
+                        Aviso.mostrar(ctx, R.string.cal_msg_desconectada)
                         refrescarCabecera()
                     }
                 }
@@ -134,10 +129,10 @@ class AgendaFragment : Fragment() {
                     }
                 } else {
                     CalendarioGoogle.registrarConexion(ctx, resultado)
-                    Toast.makeText(ctx, R.string.cal_msg_conectada, Toast.LENGTH_SHORT).show()
+                    Aviso.mostrar(ctx, R.string.cal_msg_conectada)
                 }
             } catch (e: Exception) {
-                Toast.makeText(ctx, R.string.cal_error_autorizar, Toast.LENGTH_LONG).show()
+                Aviso.mostrar(ctx, R.string.cal_error_autorizar)
             }
             if (_binding != null) {
                 binding.btnConectar.isEnabled = true
@@ -150,26 +145,12 @@ class AgendaFragment : Fragment() {
         val ctx = requireContext().applicationContext
         binding.btnSync.isEnabled = false
         SincronizadorAgenda.sincronizarPendientes(ctx) { exitosos, fallidos ->
-            Toast.makeText(ctx, ctx.getString(R.string.cal_msg_sync_resultado, exitosos, fallidos), Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, ctx.getString(R.string.cal_msg_sync_resultado, exitosos, fallidos))
             if (_binding != null) {
                 binding.btnSync.isEnabled = true
                 refrescarCabecera()
             }
         }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_agenda, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_nueva_cita) {
-            findNavController().navigate(R.id.action_agenda_to_form, bundleOf("tipo" to "CITA"))
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

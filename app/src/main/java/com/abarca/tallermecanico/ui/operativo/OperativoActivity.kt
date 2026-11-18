@@ -37,7 +37,7 @@ class OperativoActivity : AppCompatActivity() {
         binding.asistente.vincular(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
             v.setPadding(0, systemBars.top, 0, systemBars.bottom)
             insets
         }

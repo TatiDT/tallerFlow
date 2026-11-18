@@ -13,6 +13,7 @@ import com.abarca.tallermecanico.data.repository.TareaRepository
 import com.abarca.tallermecanico.data.repository.UsuarioRepository
 import com.abarca.tallermecanico.data.repository.VehiculoRepository
 import com.abarca.tallermecanico.util.AppCheckProveedor
+import com.abarca.tallermecanico.util.Aviso
 import com.abarca.tallermecanico.util.Notificaciones
 import com.abarca.tallermecanico.util.RecordarSesion
 import com.abarca.tallermecanico.util.TallerActual
@@ -33,6 +34,7 @@ class TallerApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instancia = this
+        Aviso.iniciar(this)
         FirebaseApp.initializeApp(this)
         FirebaseAppCheck.getInstance().installAppCheckProviderFactory(AppCheckProveedor.fabrica())
         Traductor.iniciar(this)

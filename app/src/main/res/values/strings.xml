@@ -231,6 +231,9 @@
     <string name="btn_login_google">Continuar con Google</string>
     <string name="error_google_sin_usuario">Esta cuenta de Google no está asociada a ningún usuario activo. Pide al administrador que registre tu correo.</string>
     <string name="error_google_cancelado">No se pudo iniciar sesión con Google. Inténtalo nuevamente.</string>
+    <string name="error_google_detalle">No se pudo iniciar sesión con Google.
+
+Detalle técnico: %1$s</string>
     <string name="error_google_sin_cuentas">No hay cuentas de Google disponibles en este dispositivo.</string>
     <string name="menu_idioma">Idioma</string>
     <string name="title_idioma">Idioma de la aplicación</string>
@@ -348,6 +351,10 @@
     <string name="label_agenda_cliente">Cliente: %1$s (%2$s)</string>
     <string name="label_agenda_vehiculo">Vehículo: %1$s · %2$s</string>
     <string name="label_agenda_mecanico">Mecánico: %1$s</string>
+    <string name="menu_agendar_reparacion">Agendar reparación</string>
+    <string name="error_mecanico_sin_correo">Este mecánico no tiene correo registrado. Agrégalo en Usuarios para que Google Calendar le avise</string>
+    <string name="error_horario_ocupado">Horario no disponible para este mecánico</string>
+    <string name="error_mecanico_ocupado">%1$s ya tiene una reparación agendada de %2$s a %3$s (%4$s). Elige otro horario u otro mecánico.</string>
     <string name="label_agenda_duracion">%1$s · %2$d min</string>
 
     <string name="escanear_codigo_repuesto">Escanear código de barras</string>

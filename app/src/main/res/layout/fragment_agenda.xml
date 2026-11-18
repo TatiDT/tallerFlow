@@ -60,6 +60,17 @@
             android:scrollbars="none" />
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_nueva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        android:text="@string/menu_agendar_reparacion"
+        android:textColor="@color/tf_bg_dark"
+        app:backgroundTint="@color/tf_accent"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"

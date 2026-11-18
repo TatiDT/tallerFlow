@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -116,10 +116,10 @@ class FichaActivaFragment : Fragment() {
                 vehiculoViewModel.update(v.copy(estado = EstadoVehiculo.TERMINADO)) { error ->
                     if (error == null) {
                         AnalyticsLogger.logCrud(ctx, "vehiculo", "terminar")
-                        Toast.makeText(ctx, R.string.msg_guardado_ok, Toast.LENGTH_SHORT).show()
+                        Aviso.mostrar(ctx, R.string.msg_guardado_ok)
                         if (_binding != null) findNavController().popBackStack()
                     } else {
-                        Toast.makeText(ctx, FirestoreOps.mensajeError(ctx, error), Toast.LENGTH_LONG).show()
+                        Aviso.mostrar(ctx, FirestoreOps.mensajeError(ctx, error))
                         if (_binding != null) mostrarCarga(false)
                     }
                 }

@@ -33,6 +33,7 @@ import com.abarca.tallermecanico.ui.operativo.OperativoActivity
 import com.abarca.tallermecanico.ui.registro.RegistroActivity
 import com.abarca.tallermecanico.util.AnalyticsLogger
 import com.abarca.tallermecanico.util.AuthGoogle
+import com.abarca.tallermecanico.util.Aviso
 import com.abarca.tallermecanico.util.Notificaciones
 import com.abarca.tallermecanico.util.RecordarSesion
 import com.abarca.tallermecanico.util.Sesion
@@ -240,7 +241,10 @@ class MainActivity : AppCompatActivity() {
                 mostrarError(R.string.error_google_sin_cuentas)
             } catch (e: Exception) {
                 Log.e("Google", "Fallo inicio con Google", e)
-                mostrarError(R.string.error_google_cancelado)
+                val detalle = "${e::class.java.simpleName}: ${e.message.orEmpty()}".take(300)
+                binding.tilPassword.error = getString(R.string.error_google_cancelado)
+                enCurso(false)
+                Aviso.mostrar(this@MainActivity, getString(R.string.error_google_detalle, detalle))
             }
         }
     }

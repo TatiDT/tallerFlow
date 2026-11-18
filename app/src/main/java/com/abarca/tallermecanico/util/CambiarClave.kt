@@ -2,7 +2,6 @@ package com.abarca.tallermecanico.util
 
 import android.app.Activity
 import android.content.DialogInterface
-import android.widget.Toast
 import com.abarca.tallermecanico.R
 import com.abarca.tallermecanico.data.entity.Usuario
 import com.abarca.tallermecanico.data.repository.UsuarioRepository
@@ -105,5 +104,5 @@ private fun Activity.cambiarClaveCorreo(
 private fun Activity.terminarCambio(usuario: Usuario) {
     Sesion.usuarioActual = usuario
     RecordarSesion.actualizarSiGuardada(usuario)
-    Toast.makeText(this, R.string.msg_clave_cambiada, Toast.LENGTH_SHORT).show()
+    Aviso.mostrar(this, R.string.msg_clave_cambiada)
 }

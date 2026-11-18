@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -268,10 +268,10 @@ class VehiculoFormFragment : Fragment() {
         if (error == null) {
             alExito()
             AnalyticsLogger.logCrud(ctx, "vehiculo", accion)
-            Toast.makeText(ctx, mensajeOk, Toast.LENGTH_SHORT).show()
+            Aviso.mostrar(ctx, mensajeOk)
             if (_binding != null) findNavController().popBackStack()
         } else {
-            Toast.makeText(ctx, FirestoreOps.mensajeError(ctx, error), Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, FirestoreOps.mensajeError(ctx, error))
             alFallar()
             if (_binding != null) mostrarCarga(false)
         }

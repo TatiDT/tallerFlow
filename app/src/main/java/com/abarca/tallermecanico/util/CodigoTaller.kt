@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.widget.Toast
 import com.abarca.tallermecanico.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -22,7 +21,7 @@ fun Activity.mostrarCodigoTaller() {
         dialogo.setPositiveButton(R.string.btn_copiar) { _, _ ->
             val portapapeles = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             portapapeles.setPrimaryClip(ClipData.newPlainText("codigo_taller", codigo))
-            Toast.makeText(this, R.string.msg_codigo_copiado, Toast.LENGTH_SHORT).show()
+            Aviso.mostrar(this, R.string.msg_codigo_copiado)
         }
     }
     dialogo.show()

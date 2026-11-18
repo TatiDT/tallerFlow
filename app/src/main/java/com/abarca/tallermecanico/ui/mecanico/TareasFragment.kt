@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,7 +73,7 @@ class TareasFragment : Fragment() {
                 return@setOnClickListener
             }
             if (presupuestoViewModel.agregarAdicional(vehiculoId, descripcion)) {
-                Toast.makeText(requireContext(), R.string.msg_adicional_enviado, Toast.LENGTH_LONG).show()
+                Aviso.mostrar(requireContext(), R.string.msg_adicional_enviado)
             } else {
                 tareaViewModel.insert(Tarea(vehiculoId = vehiculoId, descripcion = descripcion))
             }

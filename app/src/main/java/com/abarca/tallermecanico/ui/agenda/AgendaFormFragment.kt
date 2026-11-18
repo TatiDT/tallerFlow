@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -196,7 +196,11 @@ class AgendaFormFragment : Fragment() {
         } else binding.tilEmail.error = null
         if (detalle.isEmpty()) { binding.tilDetalle.error = requerido; valido = false } else binding.tilDetalle.error = null
         if (esIntervencion) {
-            if (mecanico == null) { binding.tilMecanico.error = requerido; valido = false } else binding.tilMecanico.error = null
+            if (mecanico == null) {
+                binding.tilMecanico.error = requerido; valido = false
+            } else if (mecanico.email.isBlank()) {
+                binding.tilMecanico.error = getString(R.string.error_mecanico_sin_correo); valido = false
+            } else binding.tilMecanico.error = null
         }
         if (duracion == null || duracion < 15 || duracion > 720) {
             binding.tilDuracion.error = getString(R.string.error_duracion_invalida); valido = false
@@ -217,6 +221,26 @@ class AgendaFormFragment : Fragment() {
             }
         }
         if (!valido || cliente == null || vehiculo == null || duracion == null) return
+
+        if (mecanico != null) {
+            val fin = inicio + duracion * 60_000L
+            AgendaRepository.conflictoMecanico(
+                "${mecanico.nombre} ${mecanico.apellido}", mecanico.email, inicio, fin
+            )?.let {
+                Aviso.mostrar(
+                    requireContext(),
+                    getString(
+                        R.string.error_mecanico_ocupado,
+                        "${mecanico.nombre} ${mecanico.apellido}",
+                        FechaAgenda.fechaHora(it.inicio),
+                        FechaAgenda.fechaHora(it.fin),
+                        it.vehiculoPatente
+                    )
+                )
+                binding.tilHora.error = getString(R.string.error_horario_ocupado)
+                return
+            }
+        }
 
         val evento = EventoAgenda(
             id = AgendaRepository.siguienteId(tipo),
@@ -242,7 +266,7 @@ class AgendaFormFragment : Fragment() {
             } else {
                 ctx.getString(R.string.cal_msg_guardada_sin_sync, resultado.syncError)
             }
-            Toast.makeText(ctx, mensaje, Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, mensaje)
         }
         binding.progress.visibility = View.VISIBLE
         binding.btnGuardar.isEnabled = false

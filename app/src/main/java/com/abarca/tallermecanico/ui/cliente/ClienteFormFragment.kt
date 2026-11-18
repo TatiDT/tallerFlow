@@ -3,7 +3,7 @@ package com.abarca.tallermecanico.ui.cliente
 import android.os.Bundle
 import android.util.Patterns
 import android.view.*
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -108,10 +108,10 @@ class ClienteFormFragment : Fragment() {
             if (error == null) {
                 if (esNuevo) AnalyticsLogger.logRegistroCreado(ctx, "cliente")
                 else AnalyticsLogger.logRegistroActualizado(ctx, "cliente")
-                Toast.makeText(ctx, R.string.msg_guardado_ok, Toast.LENGTH_SHORT).show()
+                Aviso.mostrar(ctx, R.string.msg_guardado_ok)
                 if (_binding != null) findNavController().popBackStack()
             } else {
-                Toast.makeText(ctx, FirestoreOps.mensajeError(ctx, error), Toast.LENGTH_LONG).show()
+                Aviso.mostrar(ctx, FirestoreOps.mensajeError(ctx, error))
                 if (_binding != null) mostrarCarga(false)
             }
         }
@@ -156,10 +156,10 @@ class ClienteFormFragment : Fragment() {
                 viewModel.delete(cliente) { error ->
                     if (error == null) {
                         AnalyticsLogger.logRegistroEliminado(ctx, "cliente")
-                        Toast.makeText(ctx, R.string.msg_eliminado_ok, Toast.LENGTH_SHORT).show()
+                        Aviso.mostrar(ctx, R.string.msg_eliminado_ok)
                         if (_binding != null) findNavController().popBackStack()
                     } else {
-                        Toast.makeText(ctx, FirestoreOps.mensajeError(ctx, error), Toast.LENGTH_LONG).show()
+                        Aviso.mostrar(ctx, FirestoreOps.mensajeError(ctx, error))
                         if (_binding != null) mostrarCarga(false)
                     }
                 }

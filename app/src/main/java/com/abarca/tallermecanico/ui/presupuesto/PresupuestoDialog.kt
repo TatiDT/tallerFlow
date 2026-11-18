@@ -4,7 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.graphics.Paint
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -193,7 +193,7 @@ class PresupuestoDialog(
         val base = Uri.parse(BuildConfig.WEBPAY_TEST_URL)
         val monto = actual.total.roundToLong()
         if (base.scheme !in listOf("http", "https") || base.host.isNullOrBlank()) {
-            Toast.makeText(ctx, R.string.msg_webpay_configurar, Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, R.string.msg_webpay_configurar)
             return
         }
         val destino = base.buildUpon()
@@ -203,7 +203,7 @@ class PresupuestoDialog(
         try {
             fragment.startActivity(Intent(Intent.ACTION_VIEW, destino))
         } catch (_: ActivityNotFoundException) {
-            Toast.makeText(ctx, R.string.msg_webpay_sin_navegador, Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, R.string.msg_webpay_sin_navegador)
         }
     }
 

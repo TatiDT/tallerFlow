@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.abarca.tallermecanico.util.Aviso
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -113,8 +113,25 @@ class AgendaDetalleFragment : Fragment() {
             hora.addOnPositiveButtonClickListener {
                 val nuevoInicio = FechaAgenda.combinar(fechaUtc, hora.hour, hora.minute)
                 if (nuevoInicio <= System.currentTimeMillis()) {
-                    Toast.makeText(requireContext(), R.string.error_fecha_pasada, Toast.LENGTH_LONG).show()
+                    Aviso.mostrar(requireContext(), R.string.error_fecha_pasada)
                     return@addOnPositiveButtonClickListener
+                }
+                if (e.mecanicoNombre.isNotBlank()) {
+                    AgendaRepository.conflictoMecanico(
+                        e.mecanicoNombre, e.mecanicoEmail, nuevoInicio, nuevoInicio + e.duracionMin * 60_000L, e
+                    )?.let {
+                        Aviso.mostrar(
+                            requireContext(),
+                            getString(
+                                R.string.error_mecanico_ocupado,
+                                e.mecanicoNombre,
+                                FechaAgenda.fechaHora(it.inicio),
+                                FechaAgenda.fechaHora(it.fin),
+                                it.vehiculoPatente
+                            )
+                        )
+                        return@addOnPositiveButtonClickListener
+                    }
                 }
                 sincronizar(
                     e.copy(
@@ -161,7 +178,7 @@ class AgendaDetalleFragment : Fragment() {
             } else {
                 ctx.getString(R.string.cal_msg_guardada_sin_sync, resultado.syncError)
             }
-            Toast.makeText(ctx, mensaje, Toast.LENGTH_LONG).show()
+            Aviso.mostrar(ctx, mensaje)
             ocupado = false
             if (_binding != null) actualizarOcupado()
         }

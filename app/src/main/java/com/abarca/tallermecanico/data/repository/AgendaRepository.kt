@@ -43,6 +43,21 @@ object AgendaRepository {
 
     fun guardar(evento: EventoAgenda) = coleccion(evento.tipo).guardar(evento)
 
+    fun conflictoMecanico(
+        nombre: String,
+        email: String,
+        inicio: Long,
+        fin: Long,
+        excluir: EventoAgenda? = null
+    ): EventoAgenda? = todos().firstOrNull {
+        it.activa &&
+            it.mecanicoNombre.isNotBlank() &&
+            it.mecanicoNombre == nombre &&
+            it.mecanicoEmail.equals(email, ignoreCase = true) &&
+            it.clave != excluir?.clave &&
+            inicio < it.fin && it.inicio < fin
+    }
+
     fun getById(tipo: TipoAgenda, id: Int): EventoAgenda? = coleccion(tipo).valor.find { it.id == id }
 
     private fun coleccion(tipo: TipoAgenda) = if (tipo == TipoAgenda.CITA) citas else intervenciones
