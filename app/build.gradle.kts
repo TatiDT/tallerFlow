@@ -21,8 +21,8 @@ android {
         applicationId = "com.abarca.tallermecanico"
         minSdk = 24
         targetSdk = 37
-        versionCode = 8
-        versionName = "4.4|"
+        versionCode = 9
+        versionName = "4.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

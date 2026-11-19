@@ -162,6 +162,7 @@ class AgendaDetalleFragment : Fragment() {
                     e.copy(estado = EstadoAgenda.CANCELADA, actualizadoEn = System.currentTimeMillis()),
                     guardarAntes = true
                 )
+                findNavController().popBackStack()
             }
             .setNegativeButton(R.string.btn_cancelar, null)
             .show()
