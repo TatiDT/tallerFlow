@@ -13,6 +13,21 @@
         <action
             android:id="@+id/action_repuesto_to_form"
             app:destination="@id/repuestoFormFragment" />
+        <action
+            android:id="@+id/action_repuesto_to_donde_comprar"
+            app:destination="@id/dondeComprarFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dondeComprarFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.DondeComprarFragment"
+        android:label="@string/title_donde_comprar"
+        tools:layout="@layout/fragment_donde_comprar">
+        <argument
+            android:name="nombrePieza"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment

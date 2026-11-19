@@ -173,6 +173,16 @@ service cloud.firestore {
         && textoValido(d.codigo, 8);
     }
 
+    function cacheTiendasValida(docId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['radio', 'lat', 'lng', 'fecha', 'tiendas'])
+        && d.radio is int && d.radio > 0 && d.radio <= 50000
+        && string(d.radio) == docId
+        && d.lat is number && d.lng is number
+        && d.fecha is timestamp
+        && d.tiendas is list && d.tiendas.size() <= 200;
+    }
+
     match /codigos/{codigo} {
       allow get: if autenticado();
       allow list: if false;
@@ -253,6 +263,12 @@ service cloud.firestore {
         allow read: if autenticado();
         allow create, update: if autenticado() && intervencionValida();
         allow delete: if false;
+      }
+
+      match /cacheTiendas/{radio} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && cacheTiendasValida(radio);
+        allow delete: if autenticado();
       }
     }
 

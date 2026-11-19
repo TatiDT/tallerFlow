@@ -119,6 +119,22 @@ service cloud.firestore {
         && d.adicionales is list && d.adicionales.size() <= 100;
     }
 
+    function cacheTiendasValida(docId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['radio', 'lat', 'lng', 'fecha', 'tiendas'])
+        && d.radio is int && d.radio > 0 && d.radio <= 50000
+        && string(d.radio) == docId
+        && d.lat is number && d.lng is number
+        && d.fecha is timestamp
+        && d.tiendas is list && d.tiendas.size() <= 200;
+    }
+
+    match /cacheTiendas/{radio} {
+      allow read: if autenticado();
+      allow create, update: if autenticado() && cacheTiendasValida(radio);
+      allow delete: if autenticado();
+    }
+
     match /clientes/{id} {
       allow read: if autenticado();
       allow create, update: if autenticado() && clienteValido();
@@ -181,7 +197,7 @@ service cloud.firestore {
 
 EXPLICACION
 - Solo se permite acceso con sesion de Firebase (autenticacion anonima). Sin sesion no se permite nada, y cualquier coleccion no listada queda bloqueada.
-- Colecciones: clientes, repuestos, vehiculos, usuarios, fallas, diagnosticos, tareas, costos y presupuestos.
+- Colecciones: clientes, repuestos, vehiculos, usuarios, fallas, diagnosticos, tareas, costos y presupuestos. Ademas cacheTiendas (cache de tiendas cercanas, un documento por radio en metros).
 - Cada documento valida sus campos (solo los permitidos, tipos y largos).
 - El campo uid se guarda como dato informativo. Ya no se exige que coincida al editar, para que un registro pueda editarse desde otro dispositivo o tras reinstalar la app.
 - Los roles del taller se controlan dentro de la app. Firestore solo distingue sesion valida o no.

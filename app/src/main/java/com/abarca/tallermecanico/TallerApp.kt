@@ -23,18 +23,23 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
+import org.osmdroid.config.Configuration
+import java.io.File
 
 class TallerApp : Application() {
 
     companion object {
         lateinit var instancia: TallerApp
             private set
+
+        fun userAgentTaller(): String = "TallerFlow/" + BuildConfig.VERSION_NAME + " (com.abarca.tallermecanico)"
     }
 
     override fun onCreate() {
         super.onCreate()
         instancia = this
         Aviso.iniciar(this)
+        configurarMapa()
         FirebaseApp.initializeApp(this)
         FirebaseAppCheck.getInstance().installAppCheckProviderFactory(AppCheckProveedor.fabrica())
         Traductor.iniciar(this)
@@ -43,6 +48,14 @@ class TallerApp : Application() {
         Notificaciones.crearCanal(this)
         iniciarSesionFirebase()
         FirebaseMessaging.getInstance().token.addOnSuccessListener { Log.d("FCM", "Token: $it") }
+    }
+
+    private fun configurarMapa() {
+        Configuration.getInstance().apply {
+            userAgentValue = userAgentTaller()
+            osmdroidBasePath = File(cacheDir, "osmdroid")
+            osmdroidTileCache = File(cacheDir, "osmdroid/tiles")
+        }
     }
 
     private fun iniciarSesionFirebase() {

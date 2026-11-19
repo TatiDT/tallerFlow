@@ -84,13 +84,17 @@ class RepuestoFragment : Fragment() {
 
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_agregar, menu)
+        inflater.inflate(R.menu.menu_repuesto, menu)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_agregar) {
             findNavController().navigate(R.id.action_repuesto_to_form)
+            return true
+        }
+        if (item.itemId == R.id.action_donde_comprar) {
+            findNavController().navigate(R.id.action_repuesto_to_donde_comprar)
             return true
         }
         return super.onOptionsItemSelected(item)

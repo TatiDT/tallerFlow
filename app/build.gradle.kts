@@ -34,6 +34,10 @@ android {
         buildConfigField("String", "CORREO_TOKEN", "\"${propiedadesLocales.getProperty("correo.token", "")}\"")
         buildConfigField("String", "TALLER_DIRECCION", "\"${propiedadesLocales.getProperty("taller.direccion", "").replace("\"", "\\\"")}\"")
         buildConfigField("String", "TALLER_TELEFONO", "\"${propiedadesLocales.getProperty("taller.telefono", "").replace("\"", "\\\"")}\"")
+        val tallerLat = propiedadesLocales.getProperty("taller.lat", "0.0").trim().toDoubleOrNull() ?: 0.0
+        val tallerLng = propiedadesLocales.getProperty("taller.lng", "0.0").trim().toDoubleOrNull() ?: 0.0
+        buildConfigField("double", "TALLER_LAT", tallerLat.toString())
+        buildConfigField("double", "TALLER_LNG", tallerLng.toString())
     }
 
     buildTypes {
@@ -61,6 +65,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 
 dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

@@ -300,6 +300,26 @@ Detalle técnico: %1$s</string>
     <string name="label_adicionales_por_cotizar">%1$d adicional(es) esperando respuesta del cliente</string>
     <string name="reintentar">Reintentar</string>
 
+    <string name="menu_donde_comprar">Dónde comprar</string>
+    <string name="title_donde_comprar">Dónde comprar</string>
+    <string name="hint_pieza_buscar">Pieza a buscar</string>
+    <string name="btn_buscar_mercado_libre">Buscar en Mercado Libre</string>
+    <string name="credito_openstreetmap">© OpenStreetMap contributors</string>
+    <string name="marcador_taller">Taller</string>
+    <string name="btn_como_llegar">Cómo llegar</string>
+    <string name="btn_llamar">Llamar</string>
+    <string name="btn_sitio_web">Sitio web</string>
+    <string name="direccion_no_registrada">Dirección no registrada</string>
+    <string name="label_horario_tienda">Horario: %1$s</string>
+    <string name="distancia_metros">%1$d m</string>
+    <string name="distancia_km">%1$.1f km</string>
+    <string name="empty_tiendas">No encontramos tiendas registradas cerca del taller</string>
+    <string name="error_tiendas_sin_internet">Sin conexión a internet. Revisa tu conexión e intenta nuevamente</string>
+    <string name="error_tiendas_saturado">El servicio de mapas está saturado. Intenta de nuevo en unos minutos</string>
+    <string name="error_tiendas_servicio">No se pudieron obtener las tiendas. Intenta nuevamente</string>
+    <string name="error_tiendas_sin_ubicacion">Falta configurar la ubicación del taller (taller.lat y taller.lng)</string>
+    <string name="msg_sin_app_para_abrir">No hay una aplicación para abrir este enlace</string>
+
     <string name="nav_agenda">Agenda</string>
     <string name="menu_nueva_cita">Nueva cita</string>
     <string name="menu_programar_intervencion">Programar intervención</string>
