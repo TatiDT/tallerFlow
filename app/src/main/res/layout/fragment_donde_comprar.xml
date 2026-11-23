@@ -6,6 +6,34 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_vehiculo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/tf_text_primary"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_vehiculo"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_vehiculo_compra">
+
+        <AutoCompleteTextView
+            android:id="@+id/actv_vehiculo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_pieza"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -26,12 +54,23 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_mercado_libre"
+        android:id="@+id/btn_comprar_en_linea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="4dp"
-        android:text="@string/btn_buscar_mercado_libre" />
+        android:text="@string/btn_comprar_en_linea"
+        app:icon="@drawable/ic_carrito"
+        app:iconGravity="textStart" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_asignar_compra"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/btn_asignar_compra" />
 
     <FrameLayout
         android:layout_width="match_parent"

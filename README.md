@@ -26,7 +26,7 @@ taller.direccion=DIRECCION_QUE_APARECE_EN_LOS_EVENTOS
 taller.telefono=TELEFONO_DE_CONTACTO_DEL_TALLER
 ```
 
-3. Reglas de Firestore: el contenido de `ReglasFirebase.txt` (hasta antes de `EXPLICACION`) se publica en Firestore → Reglas.
+3. Reglas de Firestore: las reglas a publicar son las de `firestore.rules`. Su contenido se copia en Firestore → Reglas → Publicar (o se despliega con `firebase deploy --only firestore:rules`). `ReglasFirebase.txt` es una copia de ese archivo más una sección `EXPLICACION` y debe mantenerse igual.
 4. Script de correo: `apps-script/EnviarCorreo.gs` se publica como aplicación web en Google Apps Script.
 
 Para firmar una versión de producción se necesita la clave de firma propia, que tampoco se guarda en el repositorio.

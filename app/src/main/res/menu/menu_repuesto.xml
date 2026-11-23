@@ -6,7 +6,7 @@
         android:title="@string/btn_agregar"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_donde_comprar"
-        android:title="@string/menu_donde_comprar"
+        android:id="@+id/action_tiendas_online"
+        android:title="@string/menu_tiendas_online"
         app:showAsAction="never" />
 </menu>

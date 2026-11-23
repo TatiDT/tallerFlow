@@ -283,7 +283,7 @@ class VehiculoFormFragment : Fragment() {
             inflater.inflate(R.menu.menu_vehiculo_form, menu)
             val estado = vehiculoViewModel.getById(entityId)?.estado
             menu.findItem(R.id.action_inspeccion)?.isVisible = esJefe
-            menu.findItem(R.id.action_costos)?.isVisible = esJefe
+            menu.findItem(R.id.action_costos)?.isVisible = esAdmin
             menu.findItem(R.id.action_programar_intervencion)?.isVisible = (esJefe || esAdmin) &&
                 (estado == EstadoVehiculo.INGRESADO || estado == EstadoVehiculo.EN_REPARACION)
             menu.findItem(R.id.action_aprobar_trabajo)?.isVisible = esJefe && estado == EstadoVehiculo.TERMINADO

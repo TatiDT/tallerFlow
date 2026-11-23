@@ -6,6 +6,10 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function noAnonimo() {
+      return request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
     function textoValido(valor, maximo) {
       return valor is string && valor.trim().size() > 0 && valor.size() <= maximo;
     }
@@ -55,15 +59,19 @@ service cloud.firestore {
         && textoOpcional(d.fechaLimite, 20);
     }
 
-    function usuarioValido() {
+    function esCuentaPropietaria(tallerId, docId) {
+      return docId == '1' && request.auth.uid == tallerId;
+    }
+
+    function usuarioValido(tallerId, docId) {
       let d = request.resource.data;
       return d.keys().hasOnly(['id', 'uid', 'nombre', 'apellido', 'username', 'email', 'password', 'rol', 'activo'])
         && d.id is int
         && textoValido(d.nombre, 60)
         && textoValido(d.apellido, 60)
-        && textoValido(d.username, 40)
+        && textoValido(d.username, 80)
         && textoOpcional(d.email, 80)
-        && textoValido(d.password, 200)
+        && (textoValido(d.password, 200) || (d.password == '' && esCuentaPropietaria(tallerId, docId)))
         && d.rol in ['ADMIN', 'JEFE_TALLER', 'MECANICO', 'REPUESTO', 'DIAGNOSIS']
         && d.activo is bool;
     }
@@ -119,6 +127,52 @@ service cloud.firestore {
         && d.adicionales is list && d.adicionales.size() <= 100;
     }
 
+    function agendaComunValida(d) {
+      return d.id is int
+        && textoValido(d.clienteNombre, 120)
+        && d.clienteEmail is string
+        && d.clienteEmail.size() <= 120
+        && d.clienteEmail.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && textoValido(d.vehiculoPatente, 12)
+        && textoOpcional(d.vehiculoDescripcion, 120)
+        && d.inicio is timestamp
+        && d.duracionMin is int && d.duracionMin >= 15 && d.duracionMin <= 720
+        && d.estado in ['agendada', 'reprogramada', 'cancelada', 'realizada']
+        && textoOpcional(d.eventId, 200)
+        && textoOpcional(d.syncError, 300)
+        && d.creadoEn is timestamp
+        && d.actualizadoEn is timestamp;
+    }
+
+    function citaValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'clienteNombre', 'clienteEmail', 'vehiculoPatente',
+          'vehiculoDescripcion', 'servicio', 'inicio', 'duracionMin', 'estado', 'eventId', 'syncError',
+          'creadoEn', 'actualizadoEn'])
+        && agendaComunValida(d)
+        && textoValido(d.servicio, 120);
+    }
+
+    function intervencionValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'ordenTrabajoId', 'clienteNombre', 'clienteEmail', 'vehiculoPatente',
+          'vehiculoDescripcion', 'descripcion', 'mecanicoNombre', 'mecanicoEmail', 'inicio', 'duracionMin',
+          'estado', 'eventId', 'syncError', 'creadoEn', 'actualizadoEn'])
+        && agendaComunValida(d)
+        && d.ordenTrabajoId is int
+        && textoValido(d.descripcion, 120)
+        && textoOpcional(d.mecanicoNombre, 120)
+        && textoOpcional(d.mecanicoEmail, 120);
+    }
+
+    function tallerValido(tallerId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['nombre', 'ownerUid', 'codigo'])
+        && textoValido(d.nombre, 80)
+        && d.ownerUid == tallerId
+        && textoValido(d.codigo, 8);
+    }
+
     function cacheTiendasValida(docId) {
       let d = request.resource.data;
       return d.keys().hasOnly(['radio', 'lat', 'lng', 'fecha', 'tiendas'])
@@ -129,64 +183,111 @@ service cloud.firestore {
         && d.tiendas is list && d.tiendas.size() <= 200;
     }
 
-    match /cacheTiendas/{radio} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && cacheTiendasValida(radio);
-      allow delete: if autenticado();
+    function tiendaOnlineValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'nombre', 'urlBusqueda', 'formato', 'orden', 'activa'])
+        && d.id is int
+        && textoValido(d.nombre, 60)
+        && textoValido(d.urlBusqueda, 300)
+        && d.urlBusqueda.matches('^https://.*[{]consulta[}].*$')
+        && d.formato in ['espacios', 'guiones']
+        && d.orden is int && d.orden >= 0 && d.orden <= 1000
+        && d.activa is bool;
     }
 
-    match /clientes/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && clienteValido();
-      allow delete: if autenticado();
+    match /codigos/{codigo} {
+      allow get: if autenticado();
+      allow list: if false;
+      allow create: if noAnonimo()
+        && request.resource.data.keys().hasOnly(['tallerId'])
+        && request.resource.data.tallerId == request.auth.uid;
+      allow update, delete: if false;
     }
 
-    match /repuestos/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && repuestoValido();
-      allow delete: if autenticado();
-    }
+    match /talleres/{tallerId} {
+      allow get: if autenticado();
+      allow list: if false;
+      allow create: if noAnonimo() && request.auth.uid == tallerId && tallerValido(tallerId);
+      allow update: if noAnonimo() && request.auth.uid == tallerId && tallerValido(tallerId);
+      allow delete: if false;
 
-    match /vehiculos/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && vehiculoValido();
-      allow delete: if autenticado();
-    }
+      match /clientes/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && clienteValido();
+        allow delete: if autenticado();
+      }
 
-    match /usuarios/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && usuarioValido();
-      allow delete: if autenticado();
-    }
+      match /repuestos/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && repuestoValido();
+        allow delete: if autenticado();
+      }
 
-    match /fallas/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && fallaValida();
-      allow delete: if autenticado();
-    }
+      match /vehiculos/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && vehiculoValido();
+        allow delete: if autenticado();
+      }
 
-    match /diagnosticos/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && diagnosticoValido();
-      allow delete: if autenticado();
-    }
+      match /usuarios/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && usuarioValido(tallerId, id);
+        allow delete: if autenticado();
+      }
 
-    match /tareas/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && tareaValida();
-      allow delete: if autenticado();
-    }
+      match /fallas/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && fallaValida();
+        allow delete: if autenticado();
+      }
 
-    match /costos/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && costoValido();
-      allow delete: if autenticado();
-    }
+      match /diagnosticos/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && diagnosticoValido();
+        allow delete: if autenticado();
+      }
 
-    match /presupuestos/{id} {
-      allow read: if autenticado();
-      allow create, update: if autenticado() && presupuestoValido();
-      allow delete: if autenticado();
+      match /tareas/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && tareaValida();
+        allow delete: if autenticado();
+      }
+
+      match /costos/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && costoValido();
+        allow delete: if autenticado();
+      }
+
+      match /presupuestos/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && presupuestoValido();
+        allow delete: if autenticado();
+      }
+
+      match /citas/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && citaValida();
+        allow delete: if false;
+      }
+
+      match /intervenciones/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && intervencionValida();
+        allow delete: if false;
+      }
+
+      match /tiendasOnline/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && tiendaOnlineValida();
+        allow delete: if autenticado();
+      }
+
+      match /cacheTiendas/{radio} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && cacheTiendasValida(radio);
+        allow delete: if autenticado();
+      }
     }
 
     match /{documento=**} {
@@ -196,9 +297,12 @@ service cloud.firestore {
 }
 
 EXPLICACION
-- Solo se permite acceso con sesion de Firebase (autenticacion anonima). Sin sesion no se permite nada, y cualquier coleccion no listada queda bloqueada.
-- Colecciones: clientes, repuestos, vehiculos, usuarios, fallas, diagnosticos, tareas, costos y presupuestos. Ademas cacheTiendas (cache de tiendas cercanas, un documento por radio en metros).
-- Cada documento valida sus campos (solo los permitidos, tipos y largos).
-- El campo uid se guarda como dato informativo. Ya no se exige que coincida al editar, para que un registro pueda editarse desde otro dispositivo o tras reinstalar la app.
-- Los roles del taller se controlan dentro de la app. Firestore solo distingue sesion valida o no.
-- IMPORTANTE: la coleccion usuarios guarda el hash PBKDF2 de las contrasenas. Cualquier cliente con sesion anonima puede leerla. Para cerrar esto de verdad hay que migrar el login a Firebase Authentication con correo y contrasena.
+- Los datos de cada taller viven bajo talleres/{tallerId}/..., donde tallerId es el uid de la cuenta de Google que creo el taller. Los codigos de acceso al taller estan en codigos/{codigo}. Cualquier otra ruta queda bloqueada.
+- Autenticacion: la app abre una sesion anonima de Firebase para operar, y las personas del taller entran con el usuario y la clave propios de la app. Las cuentas de Google (no anonimas) se usan para crear el taller y sus codigos. Las reglas exigen una sesion de Firebase valida; crear o modificar el documento del taller y crear codigos exige ademas una cuenta no anonima que sea la duena del taller.
+- Colecciones dentro de talleres/{tallerId}: clientes, repuestos, vehiculos, usuarios, fallas, diagnosticos, tareas, costos, presupuestos, citas, intervenciones, tiendasOnline y cacheTiendas (cache de tiendas cercanas, un documento por radio en metros).
+- tiendasOnline guarda las tiendas del boton "Comprar en linea". Campos: id, uid, nombre, urlBusqueda (debe empezar con https:// e incluir el marcador {consulta}), formato ("espacios" o "guiones"), orden (0 a 1000) y activa (true o false). Si esta vacia, la app usa dos tiendas predeterminadas (Google Shopping y Mercado Libre).
+- Cada documento valida sus campos: solo los permitidos, con sus tipos y largos maximos.
+- citas e intervenciones no se pueden eliminar desde la app.
+- El campo uid se guarda como dato informativo. No se exige que coincida al editar, para que un registro pueda editarse desde otro dispositivo o tras reinstalar la app.
+- Los roles del taller (jefe de taller, mecanico, repuestos, etc.) se controlan dentro de la app. Firestore solo distingue sesion valida o no, por lo que cualquier sesion autenticada puede escribir en las colecciones del taller.
+- IMPORTANTE: la coleccion usuarios guarda el hash PBKDF2 de las contrasenas y cualquier sesion autenticada puede leerla. Para cerrar esto de verdad hay que migrar el acceso de los usuarios del taller a Firebase Authentication con correo y contrasena.

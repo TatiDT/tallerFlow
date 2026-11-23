@@ -2,6 +2,7 @@ package com.abarca.tallermecanico.ui.repuesto
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +13,9 @@ import com.abarca.tallermecanico.databinding.ItemRepuestoBinding
 import com.abarca.tallermecanico.util.Formato
 
 class RepuestoAdapter(
-    private val onItemClick: (Repuesto) -> Unit
-) : ListAdapter<Repuesto, RepuestoAdapter.ViewHolder>(DiffCallback()) {
+    private val onItemClick: (Repuesto) -> Unit,
+    private val onDondeComprar: ((Repuesto) -> Unit)? = null
+): ListAdapter<Repuesto, RepuestoAdapter.ViewHolder>(DiffCallback()) {
 
     inner class ViewHolder(private val binding: ItemRepuestoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -26,6 +28,19 @@ class RepuestoAdapter(
             }
             binding.tvStockBadge.text = binding.root.context.getString(R.string.label_stock, repuesto.stock)
             binding.root.setOnClickListener { onItemClick(repuesto) }
+            val accion = onDondeComprar
+            if (accion != null) {
+                binding.root.setOnLongClickListener { vista ->
+                    PopupMenu(vista.context, vista).apply {
+                        menu.add(R.string.menu_donde_comprar).setOnMenuItemClickListener {
+                            accion(repuesto)
+                            true
+                        }
+                        show()
+                    }
+                    true
+                }
+            }
         }
     }
 

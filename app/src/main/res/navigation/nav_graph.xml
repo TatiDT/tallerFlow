@@ -43,7 +43,32 @@
         <action
             android:id="@+id/action_repuesto_to_form"
             app:destination="@id/repuestoFormFragment" />
+        <action
+            android:id="@+id/action_repuesto_to_tiendas"
+            app:destination="@id/tiendasOnlineFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/tiendasOnlineFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.TiendasOnlineFragment"
+        android:label="@string/title_tiendas_online"
+        tools:layout="@layout/fragment_tiendas_online">
+        <action
+            android:id="@+id/action_tiendas_to_form"
+            app:destination="@id/tiendaOnlineFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tiendaOnlineFormFragment"
+        android:name="com.abarca.tallermecanico.ui.repuesto.TiendaOnlineFormFragment"
+        android:label="@string/title_nueva_tienda_online"
+        tools:layout="@layout/fragment_tienda_online_form">
+        <argument
+            android:name="entityId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/repuestoFormFragment"

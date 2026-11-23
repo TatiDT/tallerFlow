@@ -301,9 +301,16 @@ Detalle técnico: %1$s</string>
     <string name="reintentar">Reintentar</string>
 
     <string name="menu_donde_comprar">Dónde comprar</string>
+    <string name="tab_inventario">Inventario</string>
+    <string name="label_para_vehiculo">Para: %1$s</string>
+    <string name="hint_vehiculo_compra">Vehículo para la compra</string>
+    <string name="btn_asignar_compra">Asignar compra al vehículo</string>
+    <string name="title_asignar_compra">Asignar compra</string>
+    <string name="msg_compra_asignada">Compra agregada como repuesto adicional del presupuesto</string>
+    <string name="msg_compra_sin_presupuesto">Este vehículo no tiene un presupuesto aprobado. Aprueba el presupuesto para registrar el repuesto adicional.</string>
+    <string name="msg_elige_vehiculo_compra">Elige un vehículo primero</string>
     <string name="title_donde_comprar">Dónde comprar</string>
     <string name="hint_pieza_buscar">Pieza a buscar</string>
-    <string name="btn_buscar_mercado_libre">Buscar en Mercado Libre</string>
     <string name="credito_openstreetmap">© OpenStreetMap contributors</string>
     <string name="marcador_taller">Taller</string>
     <string name="btn_como_llegar">Cómo llegar</string>
@@ -316,6 +323,7 @@ Detalle técnico: %1$s</string>
     <string name="empty_tiendas">No encontramos tiendas registradas cerca del taller</string>
     <string name="error_tiendas_sin_internet">Sin conexión a internet. Revisa tu conexión e intenta nuevamente</string>
     <string name="error_tiendas_saturado">El servicio de mapas está saturado. Intenta de nuevo en unos minutos</string>
+    <string name="error_tiendas_tiempo_agotado">El servicio de mapas tardó demasiado en responder. Intenta nuevamente</string>
     <string name="error_tiendas_servicio">No se pudieron obtener las tiendas. Intenta nuevamente</string>
     <string name="error_tiendas_sin_ubicacion">Falta configurar la ubicación del taller (taller.lat y taller.lng)</string>
     <string name="msg_sin_app_para_abrir">No hay una aplicación para abrir este enlace</string>
@@ -384,4 +392,29 @@ Detalle técnico: %1$s</string>
     <string name="msg_webpay_requiere_presupuesto">Para simular un pago, primero aprueba un presupuesto con un total mayor a cero para este vehículo.</string>
     <string name="msg_webpay_configurar">Configura la dirección del servicio local de Webpay.</string>
     <string name="msg_webpay_sin_navegador">Se necesita un navegador para abrir Webpay.</string>
+
+    <string name="btn_comprar_en_linea">Comprar en línea</string>
+    <string name="title_elegir_tienda_online">Elige dónde buscar</string>
+    <string name="empty_tiendas_online_activas">No hay tiendas en línea activas. El jefe de taller puede activarlas en Repuestos → Tiendas en línea.</string>
+    <string name="menu_tiendas_online">Tiendas en línea</string>
+    <string name="title_tiendas_online">Tiendas en línea</string>
+    <string name="title_nueva_tienda_online">Nueva tienda en línea</string>
+    <string name="title_editar_tienda_online">Editar tienda en línea</string>
+    <string name="msg_tiendas_predeterminadas">Estás viendo las tiendas predeterminadas. Al agregar, editar o eliminar una, se guardarán en tu taller.</string>
+    <string name="hint_tienda_nombre">Nombre de la tienda</string>
+    <string name="hint_tienda_url">URL de búsqueda</string>
+    <string name="helper_tienda_url">Debe empezar con https:// e incluir {consulta}</string>
+    <string name="hint_tienda_formato">Formato de la consulta</string>
+    <string name="formato_espacios">Espacios (pastillas+de+freno)</string>
+    <string name="formato_guiones">Guiones (pastillas-de-freno)</string>
+    <string name="hint_tienda_orden">Orden</string>
+    <string name="label_tienda_activa">Activa</string>
+    <string name="label_tienda_formato">Formato: %1$s · Orden: %2$d</string>
+    <string name="btn_probar">Probar</string>
+    <string name="btn_editar">Editar</string>
+    <string name="consulta_prueba_tienda">pastillas de freno</string>
+    <string name="error_url_tienda">La URL debe empezar con https:// e incluir {consulta}</string>
+    <string name="error_orden_tienda">Ingresa un número entre 0 y 1000</string>
+    <string name="confirm_eliminar_tienda_title">Eliminar tienda</string>
+    <string name="confirm_eliminar_tienda_message">¿Eliminar %1$s de las tiendas en línea?</string>
 </resources>

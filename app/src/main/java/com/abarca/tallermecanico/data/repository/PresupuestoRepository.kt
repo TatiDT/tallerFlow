@@ -72,6 +72,25 @@ object PresupuestoRepository {
         return true
     }
 
+    // Registra una compra de repuesto como adicional ya aprobado y con su monto, para que sume al total del presupuesto.
+    // Devuelve false si el vehículo no tiene un presupuesto aprobado.
+    fun agregarRepuestoAdicional(vehiculoId: Int, pieza: String, monto: Double): Boolean {
+        val presupuesto = getByVehiculoId(vehiculoId)
+        if (presupuesto == null || !presupuesto.aprobado || monto <= 0) return false
+        val descripcion = "Repuesto adicional: $pieza"
+        val tareaId = TareaRepository.insertSinValidar(Tarea(vehiculoId = vehiculoId, descripcion = descripcion))
+        val adicional = Adicional(
+            id = siguienteAdicionalId(),
+            descripcion = descripcion,
+            tareaId = tareaId,
+            precio = monto,
+            estado = EstadoAdicional.APROBADO,
+            fecha = hoy()
+        )
+        coleccion.guardar(presupuesto.copy(adicionales = presupuesto.adicionales + adicional))
+        return true
+    }
+
     fun responderAdicional(vehiculoId: Int, adicionalId: Int, precio: Double?, aprobado: Boolean) {
         val presupuesto = getByVehiculoId(vehiculoId) ?: return
         val adicional = presupuesto.adicionales.find { it.id == adicionalId } ?: return

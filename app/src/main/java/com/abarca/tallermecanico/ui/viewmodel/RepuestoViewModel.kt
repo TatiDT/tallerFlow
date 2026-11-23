@@ -1,6 +1,7 @@
 package com.abarca.tallermecanico.ui.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.abarca.tallermecanico.data.entity.Repuesto
 import com.abarca.tallermecanico.data.repository.RepuestoRepository
@@ -8,6 +9,8 @@ import com.abarca.tallermecanico.data.repository.RepuestoRepository
 class RepuestoViewModel : ViewModel() {
 
     val repuestos: LiveData<List<Repuesto>> = RepuestoRepository.repuestos
+
+    val piezaBuscada = MutableLiveData<String?>()
 
     val cargando: LiveData<Boolean> = RepuestoRepository.cargando
 

@@ -5,12 +5,20 @@ import com.abarca.tallermecanico.TallerApp
 import com.abarca.tallermecanico.util.TallerActual
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 import java.net.URLEncoder
 import java.util.Date
@@ -35,14 +43,24 @@ data class TiendaCercana(
     val distanciaMetros: Double
 )
 
-class ErrorTiendas(val tipo: Tipo) : Exception(tipo.name) {
-    enum class Tipo { SIN_INTERNET, SERVICIO_SATURADO, SERVICIO_CAIDO, SIN_UBICACION }
+class ErrorTiendas(val tipo: Tipo, detalle: String? = null) : Exception(detalle ?: tipo.name) {
+    enum class Tipo { SIN_INTERNET, TIEMPO_AGOTADO, SERVICIO_SATURADO, SERVICIO_CAIDO, SIN_UBICACION }
 }
 
 object TiendaCercanaRepository {
 
     const val RADIO_POR_DEFECTO = 5000
-    private const val URL_OVERPASS = "https://overpass-api.de/api/interpreter"
+    // Servidores públicos de Overpass: se prueban en orden si el anterior falla.
+    private val SERVIDORES_OVERPASS = listOf(
+        "https://overpass-api.de/api/interpreter",
+        "https://overpass.private.coffee/api/interpreter",
+        "https://overpass.kumi.systems/api/interpreter"
+    )
+    private const val RONDAS = 2
+    private const val ESPERA_ENTRE_RONDAS_MS = 1500L
+    private const val RETRASO_RESPALDO_MS = 3000L
+    // Códigos HTTP con los que Overpass avisa que está ocupado o sobrecargado.
+    private val CODIGOS_SATURADO = setOf(429, 502, 503, 504)
     private const val VIGENCIA_CACHE_MS = 24L * 60 * 60 * 1000
     private const val NOMBRE_POR_DEFECTO = "Tienda de repuestos"
     private const val RADIO_TIERRA_METROS = 6371000.0
@@ -54,9 +72,59 @@ object TiendaCercanaRepository {
 
         leerCache(radioMetros, lat, lng)?.let { return it }
 
-        val tiendas = withContext(Dispatchers.IO) { consultarOverpass(radioMetros, lat, lng) }
+        val tiendas = try {
+            consultarConReintentos(radioMetros, lat, lng)
+        } catch (e: ErrorTiendas) {
+            // Sin internet es un problema del usuario y no se reporta; el resto sí, para poder diagnosticarlo.
+            if (e.tipo != ErrorTiendas.Tipo.SIN_INTERNET) FirebaseCrashlytics.getInstance().recordException(e)
+            // Mejor mostrar datos guardados hace más de 24 h que mostrar un error.
+            leerCache(radioMetros, lat, lng, ignorarVigencia = true)?.let { return it }
+            throw e
+        }
         guardarCache(radioMetros, lat, lng, tiendas)
         return tiendas
+    }
+
+    // Repite la consulta si todos los servidores fallan, salvo que simplemente no haya conexión.
+    private suspend fun consultarConReintentos(radio: Int, lat: Double, lng: Double): List<TiendaCercana> {
+        var ultimoError: ErrorTiendas? = null
+        for (ronda in 1..RONDAS) {
+            try {
+                return consultarEnParalelo(radio, lat, lng)
+            } catch (e: ErrorTiendas) {
+                ultimoError = e
+                FirebaseCrashlytics.getInstance().log("Overpass ronda $ronda: ${e.message}")
+                if (e.tipo == ErrorTiendas.Tipo.SIN_INTERNET) break
+                if (ronda < RONDAS) delay(ESPERA_ENTRE_RONDAS_MS)
+            }
+        }
+        throw checkNotNull(ultimoError)
+    }
+
+    // Lanza la consulta al servidor principal y, si no responde en RETRASO_RESPALDO_MS, suma los de respaldo.
+    // Gana la primera respuesta correcta; así un servidor lento no hace esperar al usuario.
+    private suspend fun consultarEnParalelo(radio: Int, lat: Double, lng: Double): List<TiendaCercana> {
+        // Alcance propio: las conexiones bloqueadas no se pueden interrumpir y no deben retrasar el resultado.
+        val alcance = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        val resultados = Channel<Result<List<TiendaCercana>>>(SERVIDORES_OVERPASS.size)
+        try {
+            SERVIDORES_OVERPASS.forEachIndexed { indice, servidor ->
+                alcance.launch {
+                    delay(indice * RETRASO_RESPALDO_MS)
+                    resultados.send(runCatching { consultarOverpass(servidor, radio, lat, lng) })
+                }
+            }
+            val errores = mutableListOf<ErrorTiendas>()
+            repeat(SERVIDORES_OVERPASS.size) {
+                val resultado = resultados.receive()
+                resultado.getOrNull()?.let { return it }
+                val causa = resultado.exceptionOrNull()
+                errores += causa as? ErrorTiendas ?: ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_CAIDO, causa.toString())
+            }
+            throw errores.firstOrNull { it.tipo != ErrorTiendas.Tipo.SIN_INTERNET } ?: errores.last()
+        } finally {
+            alcance.cancel()
+        }
     }
 
     fun distanciaMetros(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
@@ -67,41 +135,49 @@ object TiendaCercanaRepository {
         return 2 * RADIO_TIERRA_METROS * asin(sqrt(a))
     }
 
-    private fun consultarOverpass(radio: Int, lat: Double, lng: Double): List<TiendaCercana> {
-        val consulta = "[out:json][timeout:25];nwr[\"shop\"=\"car_parts\"](around:$radio,$lat,$lng);out center tags;"
+    private fun consultarOverpass(servidor: String, radio: Int, lat: Double, lng: Double): List<TiendaCercana> {
+        // "qt" evita ordenar el resultado en el servidor, lo que hace la consulta más liviana.
+        val consulta = "[out:json][timeout:15];nwr[\"shop\"=\"car_parts\"](around:$radio,$lat,$lng);out center tags qt;"
         val cuerpo = ("data=" + URLEncoder.encode(consulta, "UTF-8")).toByteArray(Charsets.UTF_8)
         var conexion: HttpURLConnection? = null
         try {
-            conexion = (URL(URL_OVERPASS).openConnection() as HttpURLConnection).apply {
+            conexion = (URL(servidor).openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
-                connectTimeout = 15000
-                readTimeout = 35000
+                connectTimeout = 6000
+                readTimeout = 20000
                 doOutput = true
                 setRequestProperty("User-Agent", TallerApp.userAgentTaller())
                 setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
             }
             conexion.outputStream.use { it.write(cuerpo) }
             val codigo = conexion.responseCode
-            when (codigo) {
-                HttpURLConnection.HTTP_OK -> Unit
-                429, HttpURLConnection.HTTP_GATEWAY_TIMEOUT -> throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_SATURADO)
-                else -> throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_CAIDO)
+            when {
+                codigo == HttpURLConnection.HTTP_OK -> Unit
+                codigo in CODIGOS_SATURADO -> throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_SATURADO, "HTTP $codigo")
+                else -> throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_CAIDO, "HTTP $codigo")
             }
             val texto = conexion.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
             return interpretar(texto, lat, lng)
+        } catch (e: SocketTimeoutException) {
+            throw ErrorTiendas(ErrorTiendas.Tipo.TIEMPO_AGOTADO, "Tiempo agotado: ${e.message}")
         } catch (e: IOException) {
-            throw ErrorTiendas(ErrorTiendas.Tipo.SIN_INTERNET)
+            throw ErrorTiendas(ErrorTiendas.Tipo.SIN_INTERNET, "${e.javaClass.simpleName}: ${e.message}")
         } finally {
             conexion?.disconnect()
         }
     }
 
     private fun interpretar(texto: String, lat: Double, lng: Double): List<TiendaCercana> {
-        val elementos = try {
-            JSONObject(texto).optJSONArray("elements")
+        val json = try {
+            JSONObject(texto)
         } catch (e: Exception) {
-            throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_CAIDO)
-        } ?: return emptyList()
+            throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_CAIDO, "Respuesta no es JSON: ${texto.take(80)}")
+        }
+        // Overpass responde 200 con un "remark" cuando la consulta se queda sin tiempo o memoria.
+        if (json.optString("remark").contains("runtime error", ignoreCase = true)) {
+            throw ErrorTiendas(ErrorTiendas.Tipo.SERVICIO_SATURADO, json.optString("remark").take(120))
+        }
+        val elementos = json.optJSONArray("elements") ?: return emptyList()
 
         val tiendas = mutableListOf<TiendaCercana>()
         for (i in 0 until elementos.length()) {
@@ -138,13 +214,18 @@ object TiendaCercanaRepository {
         return tiendas.sortedBy { it.distanciaMetros }
     }
 
-    private suspend fun leerCache(radio: Int, lat: Double, lng: Double): List<TiendaCercana>? {
+    private suspend fun leerCache(
+        radio: Int,
+        lat: Double,
+        lng: Double,
+        ignorarVigencia: Boolean = false
+    ): List<TiendaCercana>? {
         if (TallerActual.id == null) return null
         return try {
             val documento = TallerActual.coleccion("cacheTiendas").document(radio.toString()).get().esperar()
             if (!documento.exists()) return null
             val fecha = documento.getTimestamp("fecha")?.toDate()?.time ?: return null
-            if (System.currentTimeMillis() - fecha > VIGENCIA_CACHE_MS) return null
+            if (!ignorarVigencia && System.currentTimeMillis() - fecha > VIGENCIA_CACHE_MS) return null
             if (documento.getDouble("lat") != lat || documento.getDouble("lng") != lng) return null
             val lista = documento.get("tiendas") as? List<*> ?: return null
             lista.mapNotNull { desdeMapa(it as? Map<*, *>) }.sortedBy { it.distanciaMetros }

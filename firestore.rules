@@ -183,6 +183,18 @@ service cloud.firestore {
         && d.tiendas is list && d.tiendas.size() <= 200;
     }
 
+    function tiendaOnlineValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['id', 'uid', 'nombre', 'urlBusqueda', 'formato', 'orden', 'activa'])
+        && d.id is int
+        && textoValido(d.nombre, 60)
+        && textoValido(d.urlBusqueda, 300)
+        && d.urlBusqueda.matches('^https://.*[{]consulta[}].*$')
+        && d.formato in ['espacios', 'guiones']
+        && d.orden is int && d.orden >= 0 && d.orden <= 1000
+        && d.activa is bool;
+    }
+
     match /codigos/{codigo} {
       allow get: if autenticado();
       allow list: if false;
@@ -263,6 +275,12 @@ service cloud.firestore {
         allow read: if autenticado();
         allow create, update: if autenticado() && intervencionValida();
         allow delete: if false;
+      }
+
+      match /tiendasOnline/{id} {
+        allow read: if autenticado();
+        allow create, update: if autenticado() && tiendaOnlineValida();
+        allow delete: if autenticado();
       }
 
       match /cacheTiendas/{radio} {

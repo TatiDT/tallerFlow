@@ -26,6 +26,9 @@ class PresupuestoViewModel : ViewModel() {
     fun agregarAdicional(vehiculoId: Int, descripcion: String): Boolean =
         PresupuestoRepository.agregarAdicional(vehiculoId, descripcion)
 
+    fun agregarRepuestoAdicional(vehiculoId: Int, pieza: String, monto: Double): Boolean =
+        PresupuestoRepository.agregarRepuestoAdicional(vehiculoId, pieza, monto)
+
     fun responderAdicional(vehiculoId: Int, adicionalId: Int, precio: Double?, aprobado: Boolean) =
         PresupuestoRepository.responderAdicional(vehiculoId, adicionalId, precio, aprobado)
 

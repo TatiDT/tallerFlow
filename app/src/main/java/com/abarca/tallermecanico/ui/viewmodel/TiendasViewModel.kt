@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.abarca.tallermecanico.data.repository.ErrorTiendas
 import com.abarca.tallermecanico.data.repository.TiendaCercana
 import com.abarca.tallermecanico.data.repository.TiendaCercanaRepository
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 sealed class EstadoTiendas {
@@ -31,7 +33,10 @@ class TiendasViewModel : ViewModel() {
                 EstadoTiendas.Listo(TiendaCercanaRepository.buscar())
             } catch (e: ErrorTiendas) {
                 EstadoTiendas.Error(e.tipo)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
                 EstadoTiendas.Error(ErrorTiendas.Tipo.SERVICIO_CAIDO)
             }
         }

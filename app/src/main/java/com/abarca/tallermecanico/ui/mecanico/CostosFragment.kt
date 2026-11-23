@@ -54,7 +54,7 @@ class CostosFragment : Fragment() {
 
 
         val adapter = CostoAdapter(
-            onItemClick = if (Sesion.usuarioActual?.rol == RolUsuario.JEFE_TALLER) ::mostrarDialogoEditar else null
+            onItemClick = if (Sesion.usuarioActual?.rol == RolUsuario.ADMIN) ::mostrarDialogoEditar else null
         )
         if (soloLectura) (binding.tilDescripcionCosto.parent as View).visibility = View.GONE
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

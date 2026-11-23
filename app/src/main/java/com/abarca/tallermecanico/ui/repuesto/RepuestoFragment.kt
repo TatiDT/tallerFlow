@@ -8,22 +8,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.abarca.tallermecanico.R
-import com.abarca.tallermecanico.TallerApp
+import com.abarca.tallermecanico.data.entity.RolUsuario
+import com.abarca.tallermecanico.util.Sesion
 import com.abarca.tallermecanico.databinding.FragmentRepuestoBinding
-import com.abarca.tallermecanico.ui.viewmodel.RepuestoViewModel
-import com.abarca.tallermecanico.util.AnalyticsLogger
-import com.abarca.tallermecanico.util.FirestoreOps
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 
 class RepuestoFragment : Fragment() {
 
     private var _binding: FragmentRepuestoBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: RepuestoViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,53 +33,22 @@ class RepuestoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RepuestoAdapter { repuesto ->
-            val bundle = Bundle().apply { putInt("entityId", repuesto.id) }
-            findNavController().navigate(R.id.action_repuesto_to_form, bundle)
-        }
+        binding.viewPager.adapter = RepuestoPagerAdapter(this)
+        binding.viewPager.isUserInputEnabled = false
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = getString(if (position == 0) R.string.tab_inventario else R.string.title_donde_comprar)
+        }.attach()
+    }
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.adapter = adapter
-
-        var listadoRegistrado = false
-        var avisoError: Snackbar? = null
-        val actualizar = {
-            val cargando = viewModel.cargando.value != false
-            val repuestos = viewModel.repuestos.value.orEmpty()
-            val error = viewModel.error.value
-            adapter.submitList(repuestos)
-            binding.progress.visibility = if (cargando) View.VISIBLE else View.GONE
-            if (error != null && !cargando) {
-                val mensaje = FirestoreOps.mensajeError(requireContext(), error)
-                binding.tvEmpty.text = mensaje
-                binding.tvEmpty.visibility = if (repuestos.isEmpty()) View.VISIBLE else View.GONE
-                if (avisoError == null) {
-                    avisoError = Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.reintentar) {
-                            avisoError = null
-                            (requireContext().applicationContext as TallerApp).reintentar()
-                        }
-                    avisoError?.show()
-                }
-            } else {
-                avisoError?.dismiss()
-                avisoError = null
-                binding.tvEmpty.setText(R.string.empty_repuestos)
-                binding.tvEmpty.visibility = if (!cargando && repuestos.isEmpty()) View.VISIBLE else View.GONE
-            }
-            if (!cargando && error == null && !listadoRegistrado) {
-                listadoRegistrado = true
-                AnalyticsLogger.logListadoConsultado(requireContext(), "repuesto")
-            }
-        }
-        viewModel.repuestos.observe(viewLifecycleOwner) { actualizar() }
-        viewModel.cargando.observe(viewLifecycleOwner) { actualizar() }
-        viewModel.error.observe(viewLifecycleOwner) { actualizar() }
+    fun mostrarDondeComprar() {
+        _binding?.viewPager?.currentItem = 1
     }
 
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_repuesto, menu)
+        // "Tiendas en línea" solo lo ve el jefe de taller.
+        menu.findItem(R.id.action_tiendas_online)?.isVisible = Sesion.tieneRol(RolUsuario.JEFE_TALLER)
     }
 
     @Deprecated("Deprecated in Java")
@@ -93,8 +57,8 @@ class RepuestoFragment : Fragment() {
             findNavController().navigate(R.id.action_repuesto_to_form)
             return true
         }
-        if (item.itemId == R.id.action_donde_comprar) {
-            findNavController().navigate(R.id.action_repuesto_to_donde_comprar)
+        if (item.itemId == R.id.action_tiendas_online) {
+            findNavController().navigate(R.id.action_repuesto_to_tiendas)
             return true
         }
         return super.onOptionsItemSelected(item)

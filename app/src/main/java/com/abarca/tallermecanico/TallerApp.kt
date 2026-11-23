@@ -5,6 +5,7 @@ import android.util.Log
 import com.abarca.tallermecanico.data.repository.AgendaRepository
 import com.abarca.tallermecanico.data.repository.ClienteRepository
 import com.abarca.tallermecanico.data.repository.CostoRepository
+import com.abarca.tallermecanico.data.repository.TiendaOnlineRepository
 import com.abarca.tallermecanico.data.repository.DiagnosticoRepository
 import com.abarca.tallermecanico.data.repository.FallaRepository
 import com.abarca.tallermecanico.data.repository.PresupuestoRepository
@@ -70,6 +71,7 @@ class TallerApp : Application() {
                 FirebaseCrashlytics.getInstance().recordException(it)
                 ClienteRepository.publicarError(it)
                 RepuestoRepository.publicarError(it)
+                TiendaOnlineRepository.publicarError(it)
                 VehiculoRepository.publicarError(it)
                 UsuarioRepository.publicarError(it)
                 FallaRepository.publicarError(it)
@@ -111,6 +113,7 @@ class TallerApp : Application() {
     private fun limpiarRepositorios() {
         ClienteRepository.reiniciar()
         RepuestoRepository.reiniciar()
+        TiendaOnlineRepository.reiniciar()
         VehiculoRepository.reiniciar()
         UsuarioRepository.reiniciar()
         FallaRepository.reiniciar()
@@ -125,6 +128,7 @@ class TallerApp : Application() {
         if (TallerActual.id == null) return
         ClienteRepository.iniciar()
         RepuestoRepository.iniciar()
+        TiendaOnlineRepository.iniciar()
         VehiculoRepository.iniciar()
         UsuarioRepository.iniciar()
         FallaRepository.iniciar()
