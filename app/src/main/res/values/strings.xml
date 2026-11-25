@@ -389,18 +389,9 @@ Detalle técnico: %1$s</string>
     <string name="guia_escanear_codigo_repuesto">Coloca el código de barras dentro del recuadro</string>
     <string name="error_codigo_escaneado_largo">El código de barras supera los 30 caracteres permitidos</string>
     <string name="btn_webpay_simulado">Pagar con Webpay</string>
-    <string name="btn_webpay_pagado">Pagado</string>
-    <string name="badge_pagado">PAGADO</string>
-    <string name="title_webpay">Pago Webpay</string>
     <string name="msg_webpay_requiere_presupuesto">Para simular un pago, primero aprueba un presupuesto con un total mayor a cero para este vehículo.</string>
-    <string name="msg_webpay_configurar">Configura la dirección de retorno de Webpay.</string>
-    <string name="msg_webpay_sin_navegador">No se pudo abrir Webpay.</string>
-    <string name="msg_webpay_redirigiendo">Conectando con Transbank Webpay…</string>
-    <string name="msg_webpay_aprobado">Pago confirmado. El vehículo quedó marcado como pagado.</string>
-    <string name="msg_webpay_rechazado">El pago fue rechazado o no pudo validarse.</string>
-    <string name="msg_webpay_cancelado">Pago cancelado.</string>
-    <string name="msg_webpay_error_conexion">No se pudo conectar con Transbank. Intenta nuevamente.</string>
-    <string name="msg_webpay_error_guardar">Pago confirmado, pero no se pudo actualizar el vehículo.</string>
+    <string name="msg_webpay_configurar">Configura la dirección del servicio local de Webpay.</string>
+    <string name="msg_webpay_sin_navegador">Se necesita un navegador para abrir Webpay.</string>
 
     <string name="btn_comprar_en_linea">Comprar en línea</string>
     <string name="title_elegir_tienda_online">Elige dónde buscar</string>

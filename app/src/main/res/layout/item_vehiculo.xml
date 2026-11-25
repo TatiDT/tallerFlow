@@ -46,21 +46,6 @@
                     android:letterSpacing="0.08" />
 
                 <TextView
-                    android:id="@+id/tv_pagado_badge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_badge"
-                    android:backgroundTint="@color/estado_listo"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="3dp"
-                    android:text="@string/badge_pagado"
-                    android:textColor="@color/badge_text"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:visibility="gone" />
-
-                <TextView
                     android:id="@+id/tv_estado_badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

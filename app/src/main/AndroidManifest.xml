@@ -51,11 +51,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.presupuesto.WebpayActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
         <service
             android:name=".MensajeriaService"
             android:exported="false">

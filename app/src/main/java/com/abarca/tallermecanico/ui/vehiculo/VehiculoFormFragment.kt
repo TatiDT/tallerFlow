@@ -242,8 +242,7 @@ class VehiculoFormFragment : Fragment() {
             mecanicoId = selectedMecanicoId.takeIf { it != -1 },
             fechaIngreso = fechaIngreso,
             observaciones = observaciones,
-            fechaLimite = if (esJefe) fechaLimiteInput else currentVehiculo?.fechaLimite ?: "",
-            pagado = currentVehiculo?.pagado ?: false
+            fechaLimite = if (esJefe) fechaLimiteInput else currentVehiculo?.fechaLimite ?: ""
         )
         val esNuevo = currentVehiculo == null
         val ctx = requireContext().applicationContext

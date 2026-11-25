@@ -3,13 +3,8 @@ const { randomBytes } = require('node:crypto');
 const { Environment, IntegrationApiKeys, IntegrationCommerceCodes, Options, WebpayPlus } =
     require('transbank-sdk');
 
-const port = Number(process.env.PORT) || 8787;
-const origin = new URL(
-    process.env.WEBPAY_ORIGIN ||
-    process.env.RENDER_EXTERNAL_URL ||
-    `http://127.0.0.1:${port}`
-);
-const host = process.env.WEBPAY_BIND || (process.env.PORT ? '0.0.0.0' : '127.0.0.1');
+const origin = new URL(process.env.WEBPAY_ORIGIN || 'http://127.0.0.1:8787');
+const host = process.env.WEBPAY_BIND || '127.0.0.1';
 const tx = new WebpayPlus.Transaction(new Options(
     IntegrationCommerceCodes.WEBPAY_PLUS,
     IntegrationApiKeys.WEBPAY,
@@ -46,29 +41,6 @@ async function readForm(req, query) {
 createServer(async (req, res) => {
     try {
         const url = new URL(req.url, origin);
-        if (req.method === 'GET' && url.pathname === '/healthz') {
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-            return res.end('{"ok":true}');
-        }
-        if (url.pathname === '/retorno' && ['GET', 'POST'].includes(req.method)) {
-            const fields = await readForm(req, url.searchParams);
-            const params = new URLSearchParams();
-            const tokenWs = fields.get('token_ws');
-            const tbkToken = fields.get('TBK_TOKEN') || fields.get('tbk_token');
-            if (tokenWs) params.set('token_ws', tokenWs);
-            if (tbkToken) params.set('tbk_token', tbkToken);
-            const destino = '/retorno/estado' + (params.toString() ? '?' + params.toString() : '');
-            res.writeHead(303, { Location: destino, 'Cache-Control': 'no-store' });
-            return res.end();
-        }
-        if (req.method === 'GET' && url.pathname === '/retorno/estado') {
-            const cancelado = Boolean(url.searchParams.get('tbk_token'));
-            const title = cancelado ? 'Pago cancelado' : 'Confirmando pago';
-            const body = cancelado
-                ? '<p>La operación fue cancelada. Puedes volver a TallerFlow.</p>'
-                : '<p>Procesando la confirmación del pago en TallerFlow…</p>';
-            return page(res, 200, title, body);
-        }
         if (req.method === 'GET' && url.pathname === '/iniciar') {
             const amount = Number(url.searchParams.get('monto'));
             if (!Number.isSafeInteger(amount) || amount < 1 || amount > 999999999) {
@@ -132,6 +104,6 @@ createServer(async (req, res) => {
         return page(res, 502, 'No se pudo completar la operación con Webpay',
             '<p>Comprueba la conexión a internet. Si ya intentaste pagar, vuelve a cargar esta página antes de iniciar otro pago.</p>');
     }
-}).listen(port, host, () => {
+}).listen(Number(origin.port || 8787), host, () => {
     console.log('Webpay de pruebas listo en ' + origin.href);
 });

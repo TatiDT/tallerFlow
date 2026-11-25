@@ -77,19 +77,6 @@ object VehiculoRepository {
         }
     }
 
-    fun marcarPagado(vehiculoId: Int, alTerminar: (Throwable?) -> Unit = {}) {
-        val actual = getById(vehiculoId)
-        if (actual == null) {
-            alTerminar(IllegalStateException("Vehículo no encontrado"))
-            return
-        }
-        if (actual.pagado) {
-            alTerminar(null)
-            return
-        }
-        update(actual.copy(pagado = true), alTerminar)
-    }
-
     fun delete(vehiculo: Vehiculo, alTerminar: (Throwable?) -> Unit) {
         FirestoreOps.eliminar(coleccion.document(vehiculo.id.toString())) { error ->
             if (error == null) {
@@ -142,8 +129,7 @@ object VehiculoRepository {
         "mecanicoId" to mecanicoId,
         "fechaIngreso" to fechaIngreso,
         "observaciones" to observaciones,
-        "fechaLimite" to fechaLimite,
-        "pagado" to pagado
+        "fechaLimite" to fechaLimite
     )
 
     private fun DocumentSnapshot.aVehiculo(): Vehiculo? {
@@ -162,8 +148,7 @@ object VehiculoRepository {
             mecanicoId = getLong("mecanicoId")?.toInt(),
             fechaIngreso = getString("fechaIngreso") ?: "",
             observaciones = getString("observaciones") ?: "",
-            fechaLimite = getString("fechaLimite") ?: "",
-            pagado = getBoolean("pagado") ?: false
+            fechaLimite = getString("fechaLimite") ?: ""
         )
     }
 }
