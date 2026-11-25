@@ -18,6 +18,9 @@ class VehiculoViewModel : ViewModel() {
 
     fun update(vehiculo: Vehiculo, alTerminar: (Throwable?) -> Unit) = VehiculoRepository.update(vehiculo, alTerminar)
 
+    fun marcarPagado(vehiculoId: Int, alTerminar: (Throwable?) -> Unit = {}) =
+        VehiculoRepository.marcarPagado(vehiculoId, alTerminar)
+
     fun delete(vehiculo: Vehiculo, alTerminar: (Throwable?) -> Unit) = VehiculoRepository.delete(vehiculo, alTerminar)
 
     fun getById(id: Int): Vehiculo? = VehiculoRepository.getById(id)

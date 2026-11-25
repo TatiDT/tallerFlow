@@ -21,7 +21,8 @@ data class Vehiculo(
     val mecanicoId: Int? = null,
     val fechaIngreso: String = "",
     val observaciones: String = "",
-    val fechaLimite: String = ""
+    val fechaLimite: String = "",
+    val pagado: Boolean = false
 )
 
 data class VehiculoConCliente(
