@@ -32,12 +32,16 @@ data class Presupuesto(
     val adicionalesAprobados: List<Adicional> get() = adicionales.filter { it.estado == EstadoAdicional.APROBADO }
     val adicionalesPendientes: List<Adicional> get() = adicionales.filter { it.estado == EstadoAdicional.PENDIENTE }
 
+    val pagado: Boolean get() = fechaAprobacion.endsWith(SUFIJO_PAGADO)
+    val fechaAprobacionVisible: String get() = fechaAprobacion.removeSuffix(SUFIJO_PAGADO)
+
     val neto: Double get() = tratamientos.sumOf { it.precio } + adicionalesAprobados.sumOf { it.precio ?: 0.0 }
     val iva: Double get() = calcularIva(neto)
     val total: Double get() = neto + iva
 
     companion object {
         const val TASA_IVA = 0.19
+        const val SUFIJO_PAGADO = "|PAGADO"
 
         fun calcularIva(neto: Double): Double = (neto * TASA_IVA).roundToLong().toDouble()
     }

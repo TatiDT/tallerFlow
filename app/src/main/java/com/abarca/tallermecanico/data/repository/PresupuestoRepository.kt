@@ -6,7 +6,9 @@ import com.abarca.tallermecanico.data.entity.EstadoAdicional
 import com.abarca.tallermecanico.data.entity.Presupuesto
 import com.abarca.tallermecanico.data.entity.Tarea
 import com.abarca.tallermecanico.data.entity.Tratamiento
+import com.abarca.tallermecanico.util.FirestoreOps
 import com.abarca.tallermecanico.util.NotificadorCorreo
+import com.abarca.tallermecanico.util.TallerActual
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import java.text.SimpleDateFormat
@@ -56,6 +58,27 @@ object PresupuestoRepository {
         if (presupuesto.aprobado) return
         coleccion.guardar(presupuesto.copy(aprobado = true, fechaAprobacion = hoy()))
         TareaRepository.insertChecklist(presupuesto.tratamientos.map { Tarea(vehiculoId = vehiculoId, descripcion = it.nombre) })
+    }
+
+    /** Marca el presupuesto como pagado manteniendo los campos permitidos por firestore.rules. */
+    fun marcarPagado(vehiculoId: Int, alTerminar: (Throwable?) -> Unit = {}) {
+        val actual = getByVehiculoId(vehiculoId)
+        if (actual == null || !actual.aprobado) {
+            alTerminar(IllegalStateException("Presupuesto no encontrado o no aprobado"))
+            return
+        }
+        if (actual.pagado) {
+            alTerminar(null)
+            return
+        }
+        val base = actual.fechaAprobacionVisible.ifBlank { hoy() }.take(10)
+        val actualizado = actual.copy(fechaAprobacion = "$base${Presupuesto.SUFIJO_PAGADO}")
+        FirestoreOps.guardar(
+            TallerActual.coleccion("presupuestos").document(actualizado.id.toString()),
+            actualizado.aMapa(),
+            false,
+            alTerminar
+        )
     }
 
     fun fallasCotizadas(vehiculoId: Int): Set<Int> =

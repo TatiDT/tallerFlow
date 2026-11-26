@@ -1,7 +1,5 @@
 package com.abarca.tallermecanico.ui.presupuesto
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.net.Uri
 import android.graphics.Paint
 import com.abarca.tallermecanico.util.Aviso
@@ -66,7 +64,7 @@ class PresupuestoDialog(
         binding = DialogPresupuestoBinding.inflate(fragment.layoutInflater)
 
         presupuesto?.let {
-            val estado = if (it.aprobado) ctx.getString(R.string.label_presupuesto_aprobado_el, it.fechaAprobacion)
+            val estado = if (it.aprobado) ctx.getString(R.string.label_presupuesto_aprobado_el, it.fechaAprobacionVisible)
             else ctx.getString(R.string.label_presupuesto_pendiente)
             binding.tvFechaPresupuesto.text = ctx.getString(R.string.label_fecha_presupuesto, it.fechaCreacion) + " · " + estado
             binding.tvFechaPresupuesto.visibility = View.VISIBLE
@@ -126,12 +124,28 @@ class PresupuestoDialog(
 
         if (modo == Modo.VER) {
             builder.setPositiveButton(R.string.btn_cerrar, null)
+            val estaPagado = presupuesto?.pagado == true
             if (puedeResponderAdicionales && presupuesto?.aprobado == true) {
-                builder.setNeutralButton(R.string.btn_webpay_simulado, null)
+                builder.setNeutralButton(
+                    if (estaPagado) R.string.btn_webpay_pagado else R.string.btn_webpay_simulado,
+                    null
+                )
             }
             val dialog = builder.show()
-            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
-                mostrarWebpaySimulado()
+            fun actualizarBotonPago(pagado: Boolean) {
+                val boton = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL) ?: return
+                boton.isEnabled = !pagado
+                boton.alpha = if (pagado) 0.5f else 1f
+                boton.setText(if (pagado) R.string.btn_webpay_pagado else R.string.btn_webpay_simulado)
+                boton.setOnClickListener {
+                    if (!pagado) mostrarWebpaySimulado()
+                }
+            }
+            actualizarBotonPago(estaPagado)
+            viewModel.presupuestos.observe(fragment.viewLifecycleOwner) { lista ->
+                if (!dialog.isShowing) return@observe
+                val pagadoAhora = lista.find { it.vehiculoId == vehiculoId }?.pagado == true
+                actualizarBotonPago(pagadoAhora)
             }
             return
         }
@@ -182,6 +196,7 @@ class PresupuestoDialog(
         if (!puedeResponderAdicionales) return
         val ctx = fragment.requireContext()
         val actual = viewModel.getByVehiculoId(vehiculoId)
+        if (actual?.pagado == true) return
         if (actual == null || !actual.aprobado || !actual.total.isFinite() || actual.total <= 0) {
             MaterialAlertDialogBuilder(ctx)
                 .setTitle(R.string.btn_webpay_simulado)
@@ -190,21 +205,13 @@ class PresupuestoDialog(
                 .show()
             return
         }
-        val base = Uri.parse(BuildConfig.WEBPAY_TEST_URL)
+        val base = Uri.parse(BuildConfig.WEBPAY_RETURN_URL)
         val monto = actual.total.roundToLong()
         if (base.scheme !in listOf("http", "https") || base.host.isNullOrBlank()) {
             Aviso.mostrar(ctx, R.string.msg_webpay_configurar)
             return
         }
-        val destino = base.buildUpon()
-            .appendPath("iniciar")
-            .appendQueryParameter("monto", monto.toString())
-            .build()
-        try {
-            fragment.startActivity(Intent(Intent.ACTION_VIEW, destino))
-        } catch (_: ActivityNotFoundException) {
-            Aviso.mostrar(ctx, R.string.msg_webpay_sin_navegador)
-        }
+        fragment.startActivity(WebpayActivity.crearIntent(ctx, vehiculoId, monto))
     }
 
     private fun agregarFilaFalla(falla: Falla, numero: Int) {

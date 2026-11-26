@@ -35,6 +35,8 @@ class VehiculoAdapter(
             binding.tvMarcaModelo.text = "${v.marca} ${v.modelo} · ${v.año}"
             binding.tvClienteNombre.text = "Cliente: ${c.nombre} ${c.apellido}"
             binding.tvEstadoBadge.text = v.estado.display
+            binding.tvPagadoBadge.visibility =
+                if (item.presupuesto?.pagado == true) android.view.View.VISIBLE else android.view.View.GONE
 
             if (m != null) {
                 binding.tvMecanicoNombre.text = "Mecánico: ${m.nombre} ${m.apellido}"
