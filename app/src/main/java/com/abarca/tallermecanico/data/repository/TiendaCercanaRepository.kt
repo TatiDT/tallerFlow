@@ -54,7 +54,8 @@ object TiendaCercanaRepository {
     private val SERVIDORES_OVERPASS = listOf(
         "https://overpass-api.de/api/interpreter",
         "https://overpass.private.coffee/api/interpreter",
-        "https://overpass.kumi.systems/api/interpreter"
+        "https://overpass.kumi.systems/api/interpreter",
+        "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
     )
     private const val RONDAS = 2
     private const val ESPERA_ENTRE_RONDAS_MS = 1500L
@@ -144,7 +145,7 @@ object TiendaCercanaRepository {
             conexion = (URL(servidor).openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 connectTimeout = 6000
-                readTimeout = 20000
+                readTimeout = 30000
                 doOutput = true
                 setRequestProperty("User-Agent", TallerApp.userAgentTaller())
                 setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
