@@ -29,7 +29,7 @@ android {
         val webpayTestUrl = propiedadesLocales.getProperty("webpay.testUrl", "http://127.0.0.1:8787")
         require(webpayTestUrl.matches(Regex("https?://[a-zA-Z0-9.:-]+/?")))
         buildConfigField("String", "WEBPAY_TEST_URL", "\"$webpayTestUrl\"")
-        val webpayReturnUrl = propiedadesLocales.getProperty("webpay.returnUrl", "https://tallerflow-webpay.onrender.com/retorno")
+        val webpayReturnUrl = propiedadesLocales.getProperty("webpay.returnUrl", "https://tallerflow-31az.onrender.com/retorno")
         require(webpayReturnUrl.matches(Regex("https?://[a-zA-Z0-9.:-]+(/.*)?")))
         buildConfigField("String", "WEBPAY_RETURN_URL", "\"$webpayReturnUrl\"")
         buildConfigField("String", "TRANSBANK_BASE_URL", "\"https://webpay3gint.transbank.cl/\"")
