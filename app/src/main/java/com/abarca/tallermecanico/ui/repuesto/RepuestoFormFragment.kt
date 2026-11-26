@@ -2,6 +2,7 @@ package com.abarca.tallermecanico.ui.repuesto
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import com.abarca.tallermecanico.util.Aviso
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -51,12 +52,13 @@ class RepuestoFormFragment : Fragment() {
         requireActivity().title = if (entityId == -1) getString(R.string.title_nuevo_repuesto)
         else getString(R.string.title_editar_repuesto)
 
+        configurarCategoriaDropdown()
         if (entityId != -1) {
             viewModel.getById(entityId)?.let { repuesto ->
                 currentRepuesto = repuesto
                 binding.etNombreRepuesto.setText(repuesto.nombre)
                 binding.etCodigoRepuesto.setText(repuesto.codigo)
-                binding.etCategoria.setText(repuesto.categoria)
+                binding.actvCategoria.setText(repuesto.categoria, false)
                 binding.etPrecio.setText(repuesto.precio.toString())
                 binding.etStock.setText(repuesto.stock.toString())
             }
@@ -73,10 +75,16 @@ class RepuestoFormFragment : Fragment() {
         binding.btnGuardar.setOnClickListener { guardar() }
     }
 
+    private fun configurarCategoriaDropdown() {
+        val categorias = resources.getStringArray(R.array.categorias_repuesto)
+        binding.actvCategoria.setAdapter(ArrayAdapter(requireContext(), R.layout.item_dropdown, categorias))
+        binding.actvCategoria.setOnItemClickListener { _, _, _, _ -> binding.tilCategoria.error = null }
+    }
+
     private fun guardar() {
         val nombre = binding.etNombreRepuesto.text?.toString()?.trim() ?: ""
         val codigo = binding.etCodigoRepuesto.text?.toString()?.trim()?.uppercase() ?: ""
-        val categoria = binding.etCategoria.text?.toString()?.trim() ?: ""
+        val categoria = binding.actvCategoria.text?.toString()?.trim() ?: ""
         val precioStr = binding.etPrecio.text?.toString()?.trim() ?: ""
         val stockStr = binding.etStock.text?.toString()?.trim() ?: ""
         var isValid = true

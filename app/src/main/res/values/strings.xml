@@ -151,6 +151,28 @@
     <string name="error_codigo_duplicado">Este código ya está registrado</string>
     <string name="label_stock">Stock: %1$d</string>
     <string name="hint_categoria">Categoría</string>
+    <string-array name="categorias_repuesto">
+        <item>Filtros</item>
+        <item>Aceites y lubricantes</item>
+        <item>Frenos</item>
+        <item>Suspensión y dirección</item>
+        <item>Motor</item>
+        <item>Distribución</item>
+        <item>Encendido</item>
+        <item>Sistema eléctrico</item>
+        <item>Baterías</item>
+        <item>Sensores y electrónica</item>
+        <item>Refrigeración</item>
+        <item>Combustible</item>
+        <item>Transmisión y embrague</item>
+        <item>Escape</item>
+        <item>Climatización</item>
+        <item>Iluminación</item>
+        <item>Neumáticos y llantas</item>
+        <item>Carrocería</item>
+        <item>Accesorios</item>
+        <item>Otros</item>
+    </string-array>
     <string name="hint_precio">Precio neto (CLP)</string>
     <string name="error_precio_invalido">Ingresa un precio entre 1 y 10.000.000</string>
     <string name="error_stock_invalido">Ingresa un stock entre 0 y 100.000</string>

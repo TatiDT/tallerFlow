@@ -62,19 +62,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_categoria"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
             android:hint="@string/hint_categoria">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_categoria"
+            <AutoCompleteTextView
+                android:id="@+id/actv_categoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
-                android:imeOptions="actionNext"
-                android:maxLength="40"
-                android:maxLines="1" />
+                android:inputType="none"
+                android:focusable="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
